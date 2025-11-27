@@ -46,9 +46,9 @@ export const LaunchPad = () => {
 
         {/* Footer */}
         <footer className="absolute bottom-0 left-0 w-full border-t border-white/10 py-6 text-center sm:py-12">
-          <p className="mb-2 text-lg text-main-300 sm:mb-6">Connect your wallet to access your private address.</p>
-          <div className="flex justify-center space-x-6">
-            <a href={externalLinks.twitter} target="_blank" className="text-main-300 hover:text-main-base">Twitter</a>
+          <p className="mb-2 text-sm sm:text-lg text-main-300 sm:mb-6">Your wallet has a private address ready to explore</p>
+          <div className="flex justify-center space-x-6 text-sm sm:text-base text-main-300 hover:text-main-base">
+          <a href={externalLinks.twitter} target="_blank" className="text-main-300 hover:text-main-base">Twitter</a>
             <a href={externalLinks.discord} target="_blank" className="text-main-300 hover:text-main-base">Discord</a>
             <a href={externalLinks.docs} target="_blank" className="text-main-300 hover:text-main-base">Docs</a>
             <a href={externalLinks.github} target="_blank" className="text-main-300 hover:text-main-base">GitHub</a>
