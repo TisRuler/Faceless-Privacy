@@ -1,0 +1,1 @@
+export type MnemonicLength = 12 | 24;

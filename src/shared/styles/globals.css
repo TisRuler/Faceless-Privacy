@@ -1,0 +1,54 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body {
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: Segoe UI, Roboto, Ubuntu, Fira Sans, Cantarell, Oxygen, Droid Sans, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: isb;
+  src: url(../../assets/fonts/isb.ttf);
+}
+
+@font-face {
+  font-family: ib;
+  src: url(../../assets/fonts/ib.ttf);
+}
+
+
+@font-face {
+  font-family: im;
+  src: url(../../assets/fonts/im.ttf);
+}
+
+
+/* Remove spinner controls in Webkit browsers (Chrome, Safari, etc.) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove spinner controls in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield; 
+  appearance: textfield;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
