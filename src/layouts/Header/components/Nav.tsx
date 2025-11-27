@@ -32,11 +32,19 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 };
 
 // Helper
-const MoreMenuTextLinks = ({ text, onClick }: { text: string; onClick: () => void }) => {
+const MoreMenuTextLinks = ({ text, onClick, href }: { text: string; onClick?: () => void; href?: string }) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else if (href) {
+      window.open(href, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <button
-      onClick={onClick}
-      className={`${textSize} flex w-full cursor-pointer items-center gap-2 whitespace-nowrap px-2 py-1 text-main-base hover:rounded-xl hover:hover:bg-main-500`}
+      onClick={handleClick}
+      className={`${textSize} flex w-full cursor-pointer items-center gap-2 whitespace-nowrap px-2 py-1 text-main-base hover:rounded-xl hover:bg-main-500`}
     >
       <ArrowUpRightIcon className="h-6 w-4" />
       <span className="whitespace-nowrap">{text}</span>
@@ -48,8 +56,8 @@ const MoreMenuItems = () => (
   <div className="p-2">
     <MoreMenuTextLinks text="View Your Errors" onClick={openErrorLogModal} />
     <MoreMenuTextLinks
-      text="Documentation"
-      onClick={() => console.log("Documentation link not added yet")}
+      text="User Guide"
+      href={externalLinks.docs}
     />
 
     {/* socials */}
