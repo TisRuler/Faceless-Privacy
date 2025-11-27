@@ -44,53 +44,50 @@ const MoreMenuTextLinks = ({ text, onClick }: { text: string; onClick: () => voi
   );
 };
 
-// Helper
 const MoreMenuItems = () => (
-  <>
-    <div className="px-2 sm:my-2">
-      <MoreMenuTextLinks text="View Your Errors" onClick={openErrorLogModal} />
-      <MoreMenuTextLinks text="Documentation" onClick={() => {console.log("Documentation link not added yet");}} />
-    
-      {/* socials */}
-      <div className="flex items-center justify-between  gap-3 px-1 py-1">
-  <a
-    href={externalLinks.twitter}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
-  >
-    <Image alt="Twitter" src={TwitterIcon} width={22} height={22} />
-  </a>
+  <div className="p-2">
+    <MoreMenuTextLinks text="View Your Errors" onClick={openErrorLogModal} />
+    <MoreMenuTextLinks
+      text="Documentation"
+      onClick={() => console.log("Documentation link not added yet")}
+    />
 
-  <a
-    href={externalLinks.discord}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
-  >
-    <Image alt="Discord" src={DiscordIcon} width={22} height={22} />
-  </a>
-
-  <a
-    href={externalLinks.github}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
-  >
-    <Image alt="Github" src={GithubIcon} width={22} height={22} />
-  </a>
-</div>
-      <p className="text-center text-xs text-main-300">Version {masterConfig.version}</p>
+    {/* socials */}
+    <div className="flex items-center justify-between gap-3 px-1 py-1">
+      <a
+        href={externalLinks.twitter}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
+      >
+        <Image alt="Twitter" src={TwitterIcon} width={22} height={22} />
+      </a>
+      <a
+        href={externalLinks.discord}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
+      >
+        <Image alt="Discord" src={DiscordIcon} width={22} height={22} />
+      </a>
+      <a
+        href={externalLinks.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-main-500"
+      >
+        <Image alt="Github" src={GithubIcon} width={22} height={22} />
+      </a>
     </div>
-  </>
+    
+    <p className="text-center text-xs text-main-300">Version {masterConfig.version}</p>
+  </div>
 );
 
 // Main
 export const Nav = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   const burgerMenuRef = useRef<HTMLDivElement>(null);
@@ -102,26 +99,21 @@ export const Nav = () => {
   useOutsideClick(moreMenuRef, () => setIsMoreOpen(false));
 
   const MoreLinks = (
-    <div className="flex items-center justify-center text-main-100 hover:text-main-base">
-      <div className="dropdown-centre dropdown leading-3 lg:flex" ref={dropdownRef}>
-        <label
-          tabIndex={0}
-          className={`dropdown-toggle flex h-[1.75em] cursor-pointer items-center gap-0 rounded-xl border ${
-            isDropdownOpen ? "border hover:bg-primary-button-gradient" : "border-transparent"
-          }`}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          <h1 className="mx-1 mt-[-13px] text-2xl text-main-100 hover:text-main-base">...</h1>
-        </label>
-        {isDropdownOpen && (
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content rounded-box z-[2] mt-7 gap-1 border border-main-100 bg-black p-1"
-          >
-            <MoreMenuItems />
-          </ul>
-        )}
-      </div>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        className={`flex h-[1.75em] cursor-pointer items-center gap-0 rounded-xl border ${
+          isDropdownOpen ? "border hover:bg-primary-button-gradient" : "border-transparent"
+        }`}
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      >
+        <h1 className="mx-1 mt-[-13px] text-2xl text-main-100 hover:text-main-base">...</h1>
+      </button>
+
+      {isDropdownOpen && (
+        <div className="absolute z-[2] mt-8 sm:mt-2 border border-main-100 bg-black p-1 rounded-box">
+          <MoreMenuItems />
+        </div>
+      )}
     </div>
   );
 
@@ -134,48 +126,38 @@ export const Nav = () => {
         <NavLink href="/analytics">Privacy Analytics</NavLink>
       </span>
       <span className="mr-3 list-none px-2 py-2 lg:hidden">
-        <button onClick={openGeneralSettingsModal} className={`lg:font-im ${textSize}`}>Settings</button>
+      <button onClick={openGeneralSettingsModal} className={`lg:font-im ${textSize}`}>Settings</button>
       </span>
-      <ul className="menu menu-horizontal hidden gap-2 font-im lg:flex lg:flex-nowrap">
-        {MoreLinks}
-      </ul>
+      <ul className="menu menu-horizontal hidden gap-2 font-im lg:flex lg:flex-nowrap">{MoreLinks}</ul>
     </div>
   );
 
   return (
     <div className="text-main-base">
       {/* Mobile nav */}
-      <div className="dropdown lg:hidden" ref={burgerMenuRef}>
+      <div className="lg:hidden relative" ref={burgerMenuRef}>
         <button
-          className={"btn btn-ghost"}
+          className="px-4 pt-3"
           onClick={() => {
-            setIsDrawerOpen(prev => !prev);
+            setIsDrawerOpen((prev) => !prev);
             setIsMoreOpen(false);
           }}
         >
-          <Bars3Icon className="h-1/2" style={{ strokeWidth: 2 }} />
+          <Bars3Icon className="h-6 w-6" />
         </button>
 
         {isDrawerOpen && (
-          <ul
-            tabIndex={0}
-            className="menu-compact menu dropdown-content rounded-box ml-4 w-32 border border-main-base bg-black"
-            onClick={() => {
-              if (!isMoreOpen) setIsDrawerOpen(prev => prev);
-            }}
-          >
+          <ul className="absolute z-[50] ml-4 w-32 border border-main-base bg-black rounded-box menu-compact">
             {navLinks}
             <button
-              className="navbar-start mb-2 ml-4 mt-[-0.1em] grid w-full rounded-full text-lg sm:text-xl lg:border-2"
-              onClick={() => setIsMoreOpen(prev => !prev)}
+              className="navbar-start mb-4 ml-4 mt-[-0.1em] grid w-full rounded-full text-lg sm:text-xl lg:border-2"
+              onClick={() => setIsMoreOpen((prev) => !prev)}
             >
               <span>...</span>
             </button>
 
             {isMoreOpen && (
-              <ul
-                className="menu dropdown-content rounded-box z-[2] ml-[-8px] mt-[185px] border border-main-base bg-black"
-              >
+              <ul className="absolute z-[50] mt-2 border border-main-base bg-black rounded-box">
                 <MoreMenuItems />
               </ul>
             )}
@@ -184,9 +166,7 @@ export const Nav = () => {
       </div>
 
       {/* Desktop nav */}
-      <div className="hidden items-center justify-center text-sm lg:flex">
-        {navLinks}
-      </div>
+      <div className="hidden items-center justify-center text-sm lg:flex">{navLinks}</div>
     </div>
   );
 };
