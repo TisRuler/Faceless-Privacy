@@ -21,10 +21,10 @@ export const startEngine = async (chainId: SupportedChainId, railgunNetworkName:
   try {
     await initializeRailgunEngine();
 
-    // Load snarkjs groth16 from the global object
-    const { snarkjs: { groth16 } } = global as unknown as { snarkjs: { groth16: SnarkJSGroth16 } };
-    getProver().setSnarkJSGroth16(groth16);
-
+    // Load snarkjs groth16
+    const snarkjsModule = await import('snarkjs');
+     const snarkjs = snarkjsModule.default ?? snarkjsModule; 
+     getProver().setSnarkJSGroth16(snarkjs.groth16 as unknown as SnarkJSGroth16);
     // Load and configure engine providers
     const engineProviders = await getEngineProviders(chainId);
     await loadProvider(engineProviders, railgunNetworkName);
