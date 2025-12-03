@@ -3,12 +3,14 @@ import { getFeeHistory } from "@wagmi/core";
 import { useSettingsStore } from "~~/src/state-managers";
 import { WALLET_MODE_NOTIFICATIONS } from "~~/src/constants/notifications";
 import { throwErrorWithTitle } from "~~/src/shared/utils/other/throwErrorWithTitle";
+import { withRetry } from "~~/src/shared/utils/tokens";
 
 const BLOCK_HISTORY_COUNT = 10;
 const PRIORITY_FEE_PERCENTILE = 20;
 const MAX_FEE_BUFFER_NUMERATOR = 3n;
 const MAX_FEE_BUFFER_DENOMINATOR = 2n;
 
+// Helpers
 function calculateMedian(arr: bigint[]): bigint {
   if (arr.length === 0) throw new Error("Cannot calculate median of empty array");
   const s = [...arr].sort((a, b) => (a > b ? 1 : -1));
@@ -18,6 +20,12 @@ function calculateMedian(arr: bigint[]): bigint {
 
 const toGwei = (wei: bigint) => wei / 1_000_000_000n;
 
+const getSingleProvider = (provider: JsonRpcProvider | FallbackProvider): JsonRpcProvider =>
+  provider instanceof JsonRpcProvider
+    ? provider
+    : (provider as any).providerConfigs[0].provider as JsonRpcProvider;
+
+// Main
 export async function getBaseGasFees(
   useDefault: boolean,
   customGwei: number,
@@ -27,8 +35,10 @@ export async function getBaseGasFees(
   const wagmiConfig = useSettingsStore.getState().wagmiConfig;
   if (!wagmiConfig) throw new Error("Wagmi config not initialized");
 
+  const singleProvider = getSingleProvider(provider);
+
   try {
-    const block = await provider.getBlock("latest");
+    const block = await withRetry(() => singleProvider.getBlock("latest"), "singleProvider.getBlock function");
 
     if (!block || !("baseFeePerGas" in block) || block.baseFeePerGas === null) {
       throw new Error("baseFeePerGas is missing in the latest block");
@@ -57,9 +67,12 @@ export async function getBaseGasFees(
           .map(f => BigInt(f.toString()))
           .filter(f => f > 0n);
 
-        if (priorityFees.length === 0) throw new Error("No nonzero priority fee samples");
-
-        maxPriorityFeeWei = calculateMedian(priorityFees);
+        if (priorityFees.length === 0) {
+          const FALLBACK_PERCENTAGE = 5n; // 5% of base fee
+          maxPriorityFeeWei = (baseFee * FALLBACK_PERCENTAGE) / 100n;
+        } else {
+          maxPriorityFeeWei = calculateMedian(priorityFees);
+        }
 
         gasPriceWei = baseFee + maxPriorityFeeWei;
 
@@ -67,7 +80,7 @@ export async function getBaseGasFees(
           ((baseFee + maxPriorityFeeWei) * MAX_FEE_BUFFER_NUMERATOR) /
           MAX_FEE_BUFFER_DENOMINATOR;
       } else {
-        const feeData = await provider.getFeeData();
+        const feeData = await withRetry(() => singleProvider.getFeeData(), "singleProvider.getFeeData()");
         if (!feeData.gasPrice) {
           throw new Error("No feeData.gasPrice found.");
         }

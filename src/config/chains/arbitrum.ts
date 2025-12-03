@@ -73,7 +73,7 @@ export const ArbitrumData: ChainData = {
     type: ChainType.EVM,
     id: 42161,
   },
-  supportsEIP1559: false,
+  supportsEIP1559: true,
   blockExplorer: { name: "Arbiscan", url: "https://arbiscan.io" },
   popularTokenMetadata: {
     "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": {
