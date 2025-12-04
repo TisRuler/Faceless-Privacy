@@ -2,29 +2,26 @@ import { formatUnits, parseUnits } from "ethers";
 import { Token, SendableToken } from "~~/src/shared/types";
 import { FeeDataToDisplay } from "~~/src/screens/wallet-mode/types";
 
-const GWEI_TO_WEI = 1_000_000_000n;
-const RAILGUN_FEE_BASIS_POINTS = 25n; // 0.25%
-
 /**
  * Main: calculates network fee, railgun fee, broadcaster fee, and total fee for private address display.
  */
-export const calculateFeesToDisplay = async (
+export const calculateFeesToDisplay = (
   amountOfTokensToSend: string,
   baseToken: Token,
   tokenToSend: SendableToken,
   isForTransfer: boolean,
   isUsingSelfSignMethod: boolean, 
-  gasPriceInGwei: bigint, 
+  gasPriceInWei: bigint, 
   unformattedBroadcasterFee: bigint | undefined, 
   gasEstimate: bigint, 
   broadcasterFeeToken: SendableToken,
-): Promise<FeeDataToDisplay> => {
+): FeeDataToDisplay => {
   try {
     // Validate inputs
     if (!amountOfTokensToSend || parseFloat(amountOfTokensToSend) <= 0) {
       throw new Error("Invalid amount of tokens to send");
     }
-    if (gasPriceInGwei < 0n) {
+    if (gasPriceInWei < 0n) {
       throw new Error("Invalid gas price");
     }
     if (gasEstimate < 0n) {
@@ -33,26 +30,27 @@ export const calculateFeesToDisplay = async (
  
     const areAllFeesUsingTheSameToken = tokenToSend.address === broadcasterFeeToken.address;
 
-    const [networkFee, broadcasterFee, railgunFee] = await Promise.all([
-      getNetworkFeeForDisplay(
-        isUsingSelfSignMethod, 
-        gasEstimate, 
-        gasPriceInGwei, 
-        baseToken,
-      ),
-      formatBroadcasterFeeForDisplay(
-        isUsingSelfSignMethod,
-        unformattedBroadcasterFee,
-        broadcasterFeeToken,
-      ),
-      getRailgunFee(
-        isForTransfer, 
-        amountOfTokensToSend, 
-        tokenToSend,
-      )
-    ]);
+    // Get data
+    const networkFee = getNetworkFeeForDisplay(
+      isUsingSelfSignMethod, 
+      gasEstimate, 
+      gasPriceInWei, 
+      baseToken,
+    );
+    
+    const broadcasterFee = formatBroadcasterFeeForDisplay(
+      isUsingSelfSignMethod,
+      unformattedBroadcasterFee,
+      broadcasterFeeToken,
+    );
+    
+    const railgunFee = getRailgunFee(
+      isForTransfer, 
+      amountOfTokensToSend, 
+      tokenToSend,
+    );
 
-    const totalFee = await getTotalFee(
+    const totalFee = getTotalFee(
       areAllFeesUsingTheSameToken,
       isUsingSelfSignMethod, 
       railgunFee.amount,
@@ -68,20 +66,20 @@ export const calculateFeesToDisplay = async (
 };
 
 // Returns the estimated network fee in base token currency as string
-const getNetworkFeeForDisplay = async (
+const getNetworkFeeForDisplay = (
   isUsingSelfSignMethod: boolean, 
   gasEstimate: bigint, 
-  gasPriceInGwei: bigint,
+  gasPriceInWei: bigint,
   baseToken: Token,
-): Promise<{amount: string, token: Token}> => {
+): {amount: string, token: Token} => {
   if (!isUsingSelfSignMethod) return {amount: "0", token: baseToken};
 
-  if (gasEstimate <= 0n || gasPriceInGwei <= 0n) {
+  if (gasEstimate <= 0n || gasPriceInWei <= 0n) {
     throw new Error("Invalid gas parameters for network fee calculation");
   }
 
   // Convert Gwei → Wei, then multiply by gas estimate
-  const networkFeeInWei = gasEstimate * gasPriceInGwei * GWEI_TO_WEI;
+  const networkFeeInWei = gasEstimate * gasPriceInWei;
 
   const amount = formatUnits(networkFeeInWei, baseToken.decimals); // Returns as string
   const token = baseToken;
@@ -90,11 +88,11 @@ const getNetworkFeeForDisplay = async (
 };
 
 // Formats broadcaster fee for display as string
-const formatBroadcasterFeeForDisplay = async (
+const formatBroadcasterFeeForDisplay = (
   isUsingSelfSignMethod: boolean, 
   unformattedBroadcasterFee: bigint | undefined, 
   broadcasterFeeToken: SendableToken,
-): Promise<{amount: string, token: SendableToken}> => {
+): {amount: string, token: SendableToken} => {
 
   if (isUsingSelfSignMethod) return {amount:"0", token: broadcasterFeeToken};
   if (!unformattedBroadcasterFee || unformattedBroadcasterFee <= 0n) throw new Error("UnformattedBroadcasterFee should be larger than 0n");
@@ -111,11 +109,11 @@ const formatBroadcasterFeeForDisplay = async (
 };
 
 // Calculates railgun fee as string
-const getRailgunFee = async (
+const getRailgunFee = (
   isForTransfer: boolean,
   amountOfTokensToSend: string,
   tokenAddressToSend: SendableToken,
-): Promise<{amount: string, token: SendableToken}> => {
+): {amount: string, token: SendableToken} => {
 
   if (isForTransfer) return {amount: "0", token: tokenAddressToSend};
 

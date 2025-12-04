@@ -69,7 +69,6 @@ export async function estimateUnshieldBaseTokenLogic({
 
   // Get base gas fees
   const {
-    gasPriceInGwei, 
     gasPriceInWei, 
     maxFeePerGasInWei, 
     maxPriorityFeePerGasInWei
@@ -117,7 +116,7 @@ export async function estimateUnshieldBaseTokenLogic({
     privateModeBaseToken,
     false,
     isUsingSelfSignMethod,
-    gasPriceInGwei,
+    gasPriceInWei,
     broadcasterFeeRaw, 
     transactionGasDetails.gasEstimate,
     broadcasterFeeToken

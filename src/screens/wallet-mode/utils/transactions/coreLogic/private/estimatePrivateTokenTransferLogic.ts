@@ -65,7 +65,6 @@ export async function estimatePrivateTokenTransferLogic({
 
   // Get gas prices
   const {
-    gasPriceInGwei, 
     gasPriceInWei, 
     maxFeePerGasInWei, 
     maxPriorityFeePerGasInWei
@@ -128,7 +127,7 @@ export async function estimatePrivateTokenTransferLogic({
     tokenToSend,
     true,
     isUsingSelfSignMethod,
-    gasPriceInGwei,
+    gasPriceInWei,
     broadcasterFeeRaw, 
     transactionGasDetails.gasEstimate,
     broadcasterFeeToken

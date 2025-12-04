@@ -60,7 +60,6 @@ export async function estimateUnshieldTokensLogic({
   );
 
   const {
-    gasPriceInGwei, 
     gasPriceInWei, 
     maxFeePerGasInWei, 
     maxPriorityFeePerGasInWei
@@ -119,7 +118,7 @@ export async function estimateUnshieldTokensLogic({
     tokenToSend,
     false,
     isUsingSelfSignMethod,
-    gasPriceInGwei,
+    gasPriceInWei,
     broadcasterFeeRaw, 
     transactionGasDetails.gasEstimate,
     broadcasterFeeToken,
