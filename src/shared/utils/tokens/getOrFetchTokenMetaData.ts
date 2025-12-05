@@ -15,9 +15,9 @@ async function fetchTokenMetadata(network: ChainData, tokenAddress: string) {
   const tokenContract = await getCachedEthersERC20Contract(network.id, tokenAddress);
 
   const [name, symbol, decimals] = await Promise.all([
-    withRetry(() => tokenContract.name(), "tokenContract.name()"),
-    withRetry(() => tokenContract.symbol(), "tokenContract.symbol()"),
-    withRetry(() => getCachedTokenDecimals(network.id, tokenContract, tokenAddress), "getCachedTokenDecimals(network.id, tokenContract, tokenAddress)"),
+    withRetry(() => tokenContract.name(), "tokenContract.name()", 500),
+    withRetry(() => tokenContract.symbol(), "tokenContract.symbol()", 500),
+    withRetry(() => getCachedTokenDecimals(network.id, tokenContract, tokenAddress), "getCachedTokenDecimals(network.id, tokenContract, tokenAddress)", 500),
   ]);
 
   const logoURI = getTokenUri(network, tokenAddress);
