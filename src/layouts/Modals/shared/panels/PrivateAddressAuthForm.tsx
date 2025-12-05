@@ -178,9 +178,8 @@ export const PrivateAddressAuthForm: React.FC<PrivateAddressAuthFormProps> = ({
 
               {isSignatureSectionDisplayed ? (
                 <ModalActionButton 
-                  onClick={signatureHandler} 
+                  onClick={() => toast.success("Check Your Wallet", { duration: 4000 })} 
                   name={"Complete Action In Wallet..."}
-                  isDisabled={true}
                 />
               ) : (
                 <>
