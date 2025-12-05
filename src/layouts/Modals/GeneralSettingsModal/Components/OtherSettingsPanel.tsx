@@ -59,7 +59,7 @@ export const OtherSettingsPanel: React.FC<OtherSettingsPanelProps> = ({
   
     try {
       await generatePOIsForWallet(activeNetwork.railgunNetworkName, railgunWalletId);
-      toast.success(`Generated ${activeNetwork.name} POIs`, { id: toastId });
+      toast.success(`Generating ${activeNetwork.name} POIs`, { id: toastId });
     } catch (error) {
       toast.error("Failed to Generate POIs", { id: toastId });
       logError(error);
