@@ -133,16 +133,18 @@ export const ConnectWalletPanel: React.FC<ConnectWalletPanelProps> = ({
                 disabled 
               />
               <hr className="border-t-3 my-3 border border-modal-accent-100" />
-              {supportedWalletsConfig.map((wallet) => (
-                <a 
-                  key={wallet.name}
-                  href={wallet.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  <ModalInfoCard title={wallet.name} />
-                </a>
-              ))}
+              <div className="hide-scrollbar max-h-[15.5em] cursor-pointer overflow-y-scroll rounded-md">
+                {supportedWalletsConfig.map((wallet) => (
+                  <a 
+                    key={wallet.name}
+                    href={wallet.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <ModalInfoCard title={wallet.name} />
+                  </a>
+                ))}
+              </div>
             </>
           )}
         </>
