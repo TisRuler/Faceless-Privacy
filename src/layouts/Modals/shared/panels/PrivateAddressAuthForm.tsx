@@ -77,6 +77,7 @@ export const PrivateAddressAuthForm: React.FC<PrivateAddressAuthFormProps> = ({
   // Main functions
   const signatureHandler  = async () => {
     const publicConnectorId = useConnectorRolesStore.getState().publicConnectorId;
+
     const isConnectorReady = await ensureWalletConnectorReady({
       activeNetwork,
       wagmiConfig,
@@ -178,7 +179,7 @@ export const PrivateAddressAuthForm: React.FC<PrivateAddressAuthFormProps> = ({
               {isSignatureSectionDisplayed ? (
                 <ModalActionButton 
                   onClick={signatureHandler} 
-                  name={"Waiting for Signature..."}
+                  name={"Complete Action In Wallet..."}
                   isDisabled={true}
                 />
               ) : (
