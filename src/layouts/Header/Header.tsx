@@ -27,8 +27,8 @@ export const Header = () => {
     <>
       {!isRoot && ( 
         <div className="bg-[#3C2268] py-2 text-center">
-          <p className="px-4 font-im text-xs leading-tight text-white sm:text-sm sm:leading-normal">
-          Faceless is currently open-source and unaudited.
+          <p className="px-2 font-im text-[10px] leading-tight text-white sm:text-sm sm:leading-normal">
+          Faceless is currently open-source and unaudited on the front-end.
             <span className="sm:hidden"><br/></span>
             {" "}Please use it responsibly and at your own risk.
           </p>
