@@ -13,7 +13,16 @@ export const ViewErrorLogModal = () => {
       <ModalTitle title="Error Log" />             
 
       <ModalInfoBox>
-        Most errors can be resolved by changing the provider.
+        Most transaction issues are resolved by switching providers.<br />
+        If any problems persist, restart your device or try a different browser.<br />
+        For additional support, <a
+          href="https://faceless-privacy.gitbook.io/docs/essential-user-guide/help"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "underline" }}
+        >
+          click here
+        </a>.
       </ModalInfoBox>
 
       <hr className="border-3 border border-modal-accent-100" />
