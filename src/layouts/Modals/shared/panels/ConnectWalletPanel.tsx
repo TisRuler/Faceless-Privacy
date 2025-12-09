@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useConnect, Connector, useAccount, useSwitchAccount } from "wagmi";
+import { useConnect, Connector, useAccount } from "wagmi";
 import { supportedWalletsConfig } from "~~/src/config/supportedWalletsConfig";
 import { ModalCentreMessage, ModalInfoCard } from "../components";
 import { useEnforceConnectorChain } from "~~/src/shared/hooks/useEnforceConnectorChain";
@@ -24,7 +24,6 @@ export const ConnectWalletPanel: React.FC<ConnectWalletPanelProps> = ({
 }) => {
   const activeNetwork = useSettingsStore.getState().activeNetwork;
 
-  const { switchAccountAsync } = useSwitchAccount();
   const { connectAsync, isPending, connectors } = useConnect();
   const { connector: activeConnector } = useAccount();
   const { assignRoleToConnector } = useConnectorRolesStore();
@@ -50,24 +49,14 @@ export const ConnectWalletPanel: React.FC<ConnectWalletPanelProps> = ({
 
   // Handlers
   const handleClick = async (targetConnector: Connector) => {
-    
-    //Check if handler is active
+    // Already active? Just assign role and enforce chain
     if (activeConnector?.id === targetConnector.id) {
       assignRoleToConnector(targetConnector, setRole);
       enforceCorrectChain();
       return;
     }
-
-    const isConnectedToConnector = await targetConnector.isAuthorized();
-
-    if (isConnectedToConnector) {
-      // Wallet authorized but not active → switch
-      handleSwitchWallet(targetConnector);
-    } else {
-      // Wallet not authorized → connect
-      handleConnectWallet(targetConnector);
-    }
-
+  
+    handleConnectWallet(targetConnector);
   };
 
   const handleConnectWallet = async (targetConnector: Connector) => {
@@ -82,23 +71,6 @@ export const ConnectWalletPanel: React.FC<ConnectWalletPanelProps> = ({
       }
     } catch (error) {
       toast.error(getNotificationFromError(error, "Error Connecting, Check Wallet"));
-      logError(error);
-    } finally {
-      endActivity();
-    }
-  };
-
-  const handleSwitchWallet = async (targetConnector: Connector) => {
-    startActivity();
-    try {
-      const { accounts } = await switchAccountAsync({ connector: targetConnector });
-      if (accounts?.[0]) {
-        assignRoleToConnector(targetConnector, setRole);
-        
-        await enforceCorrectChain();
-      }
-    } catch (error) {
-      toast.error(getNotificationFromError(error, "Error Switching Address"));
       logError(error);
     } finally {
       endActivity();
