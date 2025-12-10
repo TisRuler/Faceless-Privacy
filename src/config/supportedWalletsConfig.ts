@@ -5,4 +5,5 @@ export const supportedWalletsConfig = [
   { name: "Rainbow", id: "me.rainbow", link: "https://rainbow.me/"},
   { name: "Coinbase Wallet", id: "com.coinbase.wallet", link: "https://www.coinbase.com/"},
   { name: "OKX Wallet", id: "com.okex.wallet", link: "https://web3.okx.com/"},
+  { name: "Zerion", id: "io.zerion.wallet", link: "https://zerion.io/"},
 ];
