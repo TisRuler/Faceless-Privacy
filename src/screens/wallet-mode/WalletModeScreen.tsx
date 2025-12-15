@@ -6,7 +6,7 @@ import {
   FailedToConnectBroadcasterNotice
 } from "./components";
 import { CardView } from "~~/src/shared/enums";
-import { MainUnwrappingMessage } from "./components/MainUnwrappingMessage";
+import { WalletActionExplanation } from "./components/WalletActionExplanation";
 
 export const WalletModeScreen = () => {
 
@@ -26,7 +26,10 @@ export const WalletModeScreen = () => {
         <FailedToConnectBroadcasterNotice txHash={privateModeTxHash}/>
       } */}
 
-      <MainUnwrappingMessage activeNetwork={activeNetwork} />
+      <WalletActionExplanation 
+        activeNetwork={activeNetwork} 
+        walletModeCardView={walletModeCardView} 
+      />
 
       {/* main block */}
       <WalletModeCard
