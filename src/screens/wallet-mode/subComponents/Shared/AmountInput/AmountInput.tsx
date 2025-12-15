@@ -44,7 +44,7 @@ export const AmountInput: React.FC<AmountInputProps> = ({
   const buttonClass =
     "cursor-pointer border-[0.12em] sm:border border-x-0 bg-black border-main-base flex justify-center items-center h-[3.075em] sm:h-[3em] font-isb text-main-400 text-sm flex-1";
   const inputClass =
-    "text-main-base bg-black px-4 py-2 font-isb border-[0.12em] sm:border border-r-0 border-main-base rounded-l-xl w-full outline-none";
+    "text-main-base bg-black px-4 py-2 font-isb border-[0.12em] sm:border border-r-0 border-main-base rounded-none rounded-l-xl w-full outline-none";
 
   const CommonPrivateModeTokenQuantities =
     targetTokenAddress && network

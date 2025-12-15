@@ -51,7 +51,7 @@ export const PublicModeRecipientInput: React.FC<PublicModeRecipientInputProps> =
       : "Public";
 
   // Ui
-  const inputBoxStyle = "text-main-base bg-black px-4 font-isb py-2 text-base border-[0.12em] sm:border border-r-0 border-main-base rounded-l-xl w-full outline-none";
+  const inputBoxStyle = "text-main-base bg-black px-4 font-isb py-2 text-base border-[0.12em] sm:border border-r-0 border-main-base rounded-none rounded-l-xl w-full outline-none";
 
   return (
     <div className="mt-4 w-full">

@@ -25,7 +25,7 @@ export const PrivateModeRecipientInput: React.FC<PrivateModeRecipientInputProps>
   const destinationText = destination.trim().split(" ")[0];
 
   // Ui
-  const inputBoxStyle = "text-main-base bg-black px-4 py-2 font-isb text-base border-[0.12em] sm:border border-r-0 border-main-base rounded-l-xl w-full outline-none";
+  const inputBoxStyle = "text-main-base bg-black px-4 py-2 font-isb text-base border-[0.12em] sm:border border-r-0 border-main-base rounded-none rounded-l-xl w-full outline-none";
 
   return (
     <div className="mt-4 w-full">
