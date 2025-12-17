@@ -145,3 +145,12 @@ export const openConnectPrivateAddressModal = (): void => {
 export const closeConnectPrivateAddressModal = (): void => {
   useModalStore.setState({ isConnectPrivateAddressModalOpen: false });
 };
+
+// Tooltip
+export const openToolTipModal = (title: string, tip: string): void => {
+  useModalStore.setState({ isToolTipModalOpen: true, toolTipText: {title, tip} });
+};
+
+export const closeToolTipModal = (): void => {
+  useModalStore.setState({ isToolTipModalOpen: false, toolTipText: null });
+};

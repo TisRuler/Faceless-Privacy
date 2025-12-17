@@ -39,6 +39,12 @@ interface ModalStore {
 
     isConnectPrivateAddressModalOpen: boolean,
 
+    isToolTipModalOpen: boolean,
+    toolTipText: {
+      title: string;
+      tip: string;
+    } | null,
+
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -79,4 +85,7 @@ export const useModalStore = create<ModalStore>((set) => ({
 
   isConnectPrivateAddressModalOpen: false,
 
+  isToolTipModalOpen: false,
+  toolTipText: null,
+  
 }));
