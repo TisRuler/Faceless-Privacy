@@ -18,6 +18,7 @@ import { SelectPublicTokenModal } from "./SelectPublicTokenModal/SelectPublicTok
 import { SelectPrivateTokenModal } from "./SelectPrivateTokenModal";
 import { ConnectPrivateAddressModal } from "./ConnectPrivateAddressModal";
 import { TooltipModal } from "./TooltipModal";
+import { PrivacyPolicyModal } from "./PrivacyPolicyModal";
 import { usePrivateAddressStore, useModalStore } from "~~/src/state-managers";
 
 export const ModalsIndex = () => {
@@ -41,6 +42,7 @@ export const ModalsIndex = () => {
   const isRequestEncryptionKeyModalOpen = useModalStore((state) => state.isRequestEncryptionKeyModalOpen);
   const isSelectBroadcasterModalOpen = useModalStore((state) => state.isSelectBroadcasterModalOpen);
   const isConnectPrivateAddressModalOpen = useModalStore((state) => state.isConnectPrivateAddressModalOpen);
+  const isPrivacyPolicyModalOpen = useModalStore((state) => state.isPrivacyPolicyModalOpen);
   const isToolTipModalOpen = useModalStore((state) => state.isToolTipModalOpen);
 
   // Get Private Address details
@@ -124,6 +126,8 @@ export const ModalsIndex = () => {
       {isLoadingModalOpen && <LoadingModal />}
 
       {isToolTipModalOpen && <TooltipModal />}
+
+      {isPrivacyPolicyModalOpen && <PrivacyPolicyModal />}
     </>
   );
 };

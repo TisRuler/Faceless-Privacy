@@ -154,3 +154,12 @@ export const openToolTipModal = (title: string, tip: string): void => {
 export const closeToolTipModal = (): void => {
   useModalStore.setState({ isToolTipModalOpen: false, toolTipText: null });
 };
+
+// Privacy Policy
+export const openPrivacyPolicyModal = (): void => {
+  useModalStore.setState({ isPrivacyPolicyModalOpen: true});
+};
+
+export const closePrivacyPolicyModal = (): void => {
+  useModalStore.setState({ isPrivacyPolicyModalOpen: false });
+};

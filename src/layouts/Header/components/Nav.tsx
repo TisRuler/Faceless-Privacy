@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { Bars3Icon, ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "../hooks/useOutsideClick";
-import { openErrorLogModal, openGeneralSettingsModal } from "../../Modals/modalUtils";
+import { openErrorLogModal, openGeneralSettingsModal, openPrivacyPolicyModal } from "../../Modals/modalUtils";
 import { masterConfig } from "~~/src/config/masterConfig";
 import { externalLinks } from "~~/src/config/externalLinks";
 import TwitterIcon from "~~/src/assets/images/icons/TwitterIcon.svg";
@@ -54,10 +54,17 @@ const MoreMenuTextLinks = ({ text, onClick, href }: { text: string; onClick?: ()
 
 const MoreMenuItems = () => (
   <div className="p-2">
-    <MoreMenuTextLinks text="View Your Errors" onClick={openErrorLogModal} />
+    <MoreMenuTextLinks 
+      text="View Your Errors" 
+      onClick={openErrorLogModal} 
+    />
     <MoreMenuTextLinks
       text="User Guide"
       href={externalLinks.docs}
+    />
+    <MoreMenuTextLinks
+      text="Privacy Policy"
+      onClick={openPrivacyPolicyModal} 
     />
 
     {/* socials */}
