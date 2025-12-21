@@ -14,17 +14,20 @@ import Link from "next/link";
 const textSize = "text-xs sm:text-sm";
 
 // Helper
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+const NavLink = ({ href, doOpenInNewTab, children }: { href: string; doOpenInNewTab: boolean; children: React.ReactNode }) => {
   const router = useRouter();
   const isActive = router.pathname === href;
+
+  const linkStyle = `${
+    isActive ? "font-isb text-main-base" : "text-main-base lg:font-im lg:text-main-100"
+  } hover:text-main-base ${textSize}`;
 
   return (
     <Link
       href={href}
       passHref
-      className={`${
-        isActive ? "font-isb text-main-base" : "text-main-base lg:font-im lg:text-main-100"
-      } hover:text-main-base ${textSize}`}
+      className={`${linkStyle}`}
+      {...(doOpenInNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       {children}
     </Link>
@@ -57,10 +60,6 @@ const MoreMenuItems = () => (
     <MoreMenuTextLinks 
       text="View Your Errors" 
       onClick={openErrorLogModal} 
-    />
-    <MoreMenuTextLinks
-      text="User Guide"
-      href={externalLinks.docs}
     />
     <MoreMenuTextLinks
       text="Privacy Policy"
@@ -134,17 +133,25 @@ export const Nav = () => {
 
   const navLinks = (
     <div className="ml-2 mt-1 flex flex-col lg:ml-0 lg:flex-[unset] lg:flex-none lg:flex-row">
-      <span className="list-none px-2 py-2 lg:mx-4">
-        <NavLink href="/wallet">Wallet</NavLink>
-      </span>
-      <span className="mr-3 list-none px-2 py-2">
-        <NavLink href="/analytics">Privacy Analytics</NavLink>
-      </span>
-      <span className="mr-3 list-none px-2 py-2 lg:hidden">
-      <button onClick={openGeneralSettingsModal} className={`lg:font-im ${textSize}`}>Settings</button>
-      </span>
-      <ul className="menu menu-horizontal hidden gap-2 font-im lg:flex lg:flex-nowrap">{MoreLinks}</ul>
-    </div>
+    <span className="list-none px-2 py-2 lg:mx-4">
+      <NavLink href="/wallet" doOpenInNewTab={false}>Wallet</NavLink>
+    </span>
+    <span className="mr-3 list-none px-2 py-2">
+      <NavLink href="/analytics" doOpenInNewTab={false}>Privacy Analytics</NavLink>
+    </span>
+    <span className="mr-3 list-none px-2 py-2">
+      <NavLink 
+        href={externalLinks.docs} 
+        doOpenInNewTab={true}
+      >
+        How to Use
+      </NavLink>
+    </span>
+    <span className="mr-3 list-none px-2 py-2 lg:hidden">
+    <button onClick={openGeneralSettingsModal} className={`lg:font-im ${textSize}`}>Settings</button>
+    </span>
+    <ul className="menu menu-horizontal hidden gap-2 font-im lg:flex lg:flex-nowrap">{MoreLinks}</ul>
+  </div>
   );
 
   return (
