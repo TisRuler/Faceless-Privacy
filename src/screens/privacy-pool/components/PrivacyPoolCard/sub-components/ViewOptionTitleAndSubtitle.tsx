@@ -1,12 +1,14 @@
 import React from "react";
 import { CardView } from "~~/src/shared/enums";
 import { Tooltip } from "~~/src/shared/components/Tooltip";
+import { useIsMobile } from "~~/src/shared/hooks/useIsMobile";
 
 interface ViewOptionTitleAndSubtitleProps {
   viewOption: CardView;
 }
 
 export const ViewOptionTitleAndSubtitle: React.FC<ViewOptionTitleAndSubtitleProps> = ({ viewOption }) => {
+  const isUsingMobile = useIsMobile();
   const isViewingShield = viewOption === CardView.Public;
 
   const toolTipTitle = isViewingShield ? "Inflow information" : "Outflow information";
@@ -30,7 +32,9 @@ export const ViewOptionTitleAndSubtitle: React.FC<ViewOptionTitleAndSubtitleProp
         <Tooltip title={toolTipTitle} tip={toolTipTip} />
       </div>
       
-      <p className="mb-2 font-isb text-sm text-main-100 sm:text-base">{isViewingShield ? "Recent inflow and remaining privacy pool balance" : "Recent outflow and remaining privacy pool balance"}</p>
+      {!isUsingMobile &&
+        <p className="mb-2 font-isb text-sm text-main-100 sm:text-base">{isViewingShield ? "Recent inflow and remaining privacy pool balance" : "Recent outflow and remaining privacy pool balance"}</p>
+      }
 
     </div>
   );

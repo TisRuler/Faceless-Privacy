@@ -2,6 +2,8 @@ import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import { TokenLogoDisplayer } from "./TokenLogoDisplayer";
 import { PoolTokenDetails } from "../../../../../types";
+import { formatAnonymitySetTokenQuantity } from "../../../../../utils/formatters/formatAnonymitySetTokenQuantity";
+import { useIsMobile } from "~~/src/shared/hooks/useIsMobile";
 
 interface TokenDisclosureButtonProps {
   tokenItem: PoolTokenDetails;
@@ -9,6 +11,12 @@ interface TokenDisclosureButtonProps {
 }
 
 export const CardDisclosureButton: React.FC<TokenDisclosureButtonProps> = ({ tokenItem, itemOpen }) => {
+
+  const tokensInPool = formatAnonymitySetTokenQuantity(tokenItem.anonymityPoolTokenBalance.toString());
+
+  const isUsingMobile = useIsMobile();
+  const showFullDetail = tokenItem.name.length < 26 || isUsingMobile;
+
   return (
     <Disclosure.Button
       className="mt-2 flex w-full cursor-pointer items-center justify-between rounded-lg border border-main-base bg-black px-3.5 py-3"
@@ -35,7 +43,7 @@ export const CardDisclosureButton: React.FC<TokenDisclosureButtonProps> = ({ tok
         <div className="flex  w-full justify-between whitespace-nowrap sm:w-auto">
           <div className="whitespace-nowrap font-isb">
             <p>
-              {tokenItem.anonymityPoolTokenBalance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} Tokens
+              {tokensInPool} {tokenItem.symbol} {showFullDetail && "in Pool"}
             </p>
           </div>
           <ChevronUpIcon 
