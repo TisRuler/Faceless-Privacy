@@ -8,6 +8,7 @@ import { useConnectorRolesStore, useSettingsStore } from "~~/src/state-managers"
 import { getInstalledWallets } from "../utils/getInstalledWallets";
 import { logError } from "~~/src/shared/utils/other/logError";
 import { getNotificationFromError } from "~~/src/shared/utils/other/getNotificationFromError";
+import { useIsMobile } from "~~/src/shared/hooks/useIsMobile";
 import type { ConnectorRole } from "~~/src/state-managers";
 import toast from "react-hot-toast";
 
@@ -31,14 +32,11 @@ export const ConnectWalletPanel: React.FC<ConnectWalletPanelProps> = ({
   const { connectAsync, isPending, connectors } = useConnect();
   const { connector: activeConnector } = useAccount();
   const { assignRoleToConnector } = useConnectorRolesStore();
+  const isUsingMobile = useIsMobile();
 
   const [isFunctionProcessing, setIsFunctionProcessing] = useState(false); 
 
   // Other
-  const isUsingMobile =
-    typeof navigator !== "undefined" &&
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
   const startActivity = () => {
     setIsFunctionProcessing(true);
     isProcessing?.(true);

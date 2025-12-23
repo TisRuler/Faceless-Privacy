@@ -1,6 +1,7 @@
 import { ChainData } from "~~/src/config/chains/types";
 import { CardView, PrivateModeDestination } from "~~/src/shared/enums";
 import { useWalletModeScreenStore } from "~~/src/state-managers";
+import { useIsMobile } from "~~/src/shared/hooks/useIsMobile";
 
 interface WalletActionExplanationProps {
   activeNetwork: ChainData;
@@ -20,9 +21,7 @@ export const WalletActionExplanation: React.FC<WalletActionExplanationProps> = (
   const isToPublicAddress = privateModeDestination === PrivateModeDestination.PublicAddress;
   const isBaseToken = tokenForPrivateMode.address === activeNetwork.privateModeBaseToken.address;
   const isViewingPrivateAddress = walletModeCardView === CardView.Private;
-  const isUsingMobile =
-    typeof navigator !== "undefined" &&
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isUsingMobile = useIsMobile();
 
   const displayAutoUnwrapText = isToPublicAddress && isBaseToken && feeDataToDisplay;
   const displayDesktopReliabilityText = !displayAutoUnwrapText && isUsingMobile && isViewingPrivateAddress;
