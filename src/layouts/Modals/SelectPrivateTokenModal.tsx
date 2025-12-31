@@ -68,6 +68,7 @@ export const SelectPrivateTokenModal: React.FC<SelectPrivateTokenModalProps> = (
   const isBalancesRefreshing = Number.parseFloat(privateAddressBalanceScanPercentage) > 0;
   const isMerkleTreeRefreshing = Number.parseFloat(txidMerkletreeScanPercentage) > 0;
   const isScanningBalances = isBalancesRefreshing || isMerkleTreeRefreshing;
+  const areAnyTokensPending = pendingPrivateTokens.length > 0;
 
   const doesPrivateAddressHaveTokens =
     pendingPrivateTokens.length > 0 ||
@@ -131,9 +132,11 @@ export const SelectPrivateTokenModal: React.FC<SelectPrivateTokenModalProps> = (
   };
 
   const unwrappingMessage = `Any ${activeNetwork.privateModeBaseToken.symbol} sent to a public address through Faceless is automatically converted to ${activeNetwork.publicModeBaseToken.symbol}.`;
-  const ifTokensAreUnavailable = "If your tokens aren't available within the next 15 minutes: Settings > Other > Generate All POIs.";
+  const pendingTokensMessage = `The incoming tokens should be available within 1 hour.\nif not: Settings > Other > Generate All POIs.\n${unwrappingMessage}`;
+  const ifTokensAreUnavailableMessage = "If your tokens aren't available within the next 15 minutes: Settings > Other > Generate All POIs.";
 
-  const modalInfoBoxText = showOnlyNonSpendable ? ifTokensAreUnavailable : unwrappingMessage;
+  const modalInfoBoxText = showOnlyNonSpendable ? ifTokensAreUnavailableMessage : 
+    areAnyTokensPending ? pendingTokensMessage : unwrappingMessage;
 
   const titleText = displayConnectPrivateAddressPanel ? "Connect Private Address" : "Select a Token";
 
