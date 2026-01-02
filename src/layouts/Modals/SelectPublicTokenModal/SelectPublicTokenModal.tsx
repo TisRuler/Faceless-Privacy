@@ -76,7 +76,7 @@ export const SelectPublicTokenModal = () => {
   // Ui
   const renderPublicTokens = () => {
     const showBackupMessage = tokensInPublicWallet.length < 1;
-    const dipslayBackupMessage = isLoadingPublicWalletTokens && tokensInPublicWallet.length < 1 ? "Loading Tokens..." : "You have no tokens";
+    const displayBackupMessage = isLoadingPublicWalletTokens && tokensInPublicWallet.length < 1 ? "Loading Tokens..." : "You have no tokens";
 
     return (
       <>
@@ -99,7 +99,7 @@ export const SelectPublicTokenModal = () => {
             onClick={() => handleSetShieldingToken(token)}
           />
         ))}
-        <ModalCentreMessage isVisible={showBackupMessage} message={dipslayBackupMessage}/>
+        <ModalCentreMessage isVisible={showBackupMessage} message={displayBackupMessage}/>
       </>
     );
   };

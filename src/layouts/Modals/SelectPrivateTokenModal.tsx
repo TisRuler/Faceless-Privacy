@@ -114,7 +114,7 @@ export const SelectPrivateTokenModal: React.FC<SelectPrivateTokenModalProps> = (
   });
 
   const renderPrivateTokens = () => {
-    const dipslayBackupMessage = isScanningBalances && !doesPrivateAddressHaveTokens ? "Scanning balance..." : "You have no tokens";
+    const displayBackupMessage = isScanningBalances && !doesPrivateAddressHaveTokens ? "Scanning balance..." : "You have no tokens";
     return (
       <>
         {searchResult ? (
@@ -124,7 +124,7 @@ export const SelectPrivateTokenModal: React.FC<SelectPrivateTokenModalProps> = (
             {renderTokensByType(pendingPrivateTokens, RailgunWalletBalanceBucket.ShieldPending)}
             {renderTokensByType(spendablePrivateTokens, RailgunWalletBalanceBucket.Spendable)}
             {renderTokensByType(nonSpendablePrivateTokens, NON_SPENDABLE_BUCKETS)}
-            <ModalCentreMessage isVisible={!doesPrivateAddressHaveTokens} message={dipslayBackupMessage}/>
+            <ModalCentreMessage isVisible={!doesPrivateAddressHaveTokens} message={displayBackupMessage}/>
           </>
         )}
       </>
