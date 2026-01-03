@@ -66,8 +66,7 @@ export const WalletModeScreen = () => {
         <Tooltip 
           title="Private Address Information" 
           tip={tooltipText}
-          isXl={true} 
-          isSolidColour={false}
+          isXl={true}
         />
       </div>
 

@@ -4,13 +4,12 @@ interface TooltipProps {
   title: string;
   tip: string;
   isXl?: boolean;
-  isSolidColour?: boolean;
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({ title, tip, isXl = false, isSolidColour = true }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ title, tip, isXl = false }) => {
 
     const sizeStyle = `${isXl ? "w-5 h-5 text-sm" : "w-4 h-4 text-[10px]"}`;
-    const colourStyle = `${isSolidColour ? "border-white text-white" : "text-main-100 hover:text-main-base border-main-100 hover:border-main-base"}`;
+    const colourStyle = "sm:border-main-base hover:border-main-100 sm:text-main-base text-main-100";
 
     return (
         <button 
