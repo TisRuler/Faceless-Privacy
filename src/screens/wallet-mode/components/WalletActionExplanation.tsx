@@ -41,7 +41,7 @@ export const WalletActionExplanation: React.FC<WalletActionExplanationProps> = (
     displayPaymentLinkText ? ("Only trust this address if the donation receiver sent the link") :
     ("Transactions are more reliable on desktop");
 
-  const containerClasses = "fixed top-[7.5rem] sm:top-[5.125rem] left-0 right-0 z-[1] flex justify-center m-2";
+  const containerClasses = "fixed top-[7.5rem] sm:top-[6.125rem] left-0 right-0 z-[1] flex justify-center m-2";
   const cardClasses = "rounded-2xl flex items-center font-im cursor-pointer whitespace-nowrap";
   const borderClasses = "border border-[#B8FFAD]";
   const paddingClasses = "px-3 py-1";
