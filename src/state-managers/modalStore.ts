@@ -17,6 +17,8 @@ interface ModalStore {
 
     isViewOnlyKeyModalOpen: boolean,
 
+    isGetPaymentLinkModalOpen: boolean,
+
     isPrivateAddressHistoryModalOpen: boolean,
 
     isPublicModeConnectionGateModalOpen: boolean,
@@ -64,6 +66,8 @@ export const useModalStore = create<ModalStore>((set) => ({
   isViewPrivateAddressMnemonicModalOpen: false,
 
   isViewOnlyKeyModalOpen: false,
+
+  isGetPaymentLinkModalOpen: false,
 
   isPrivateAddressHistoryModalOpen: false,
 

@@ -9,6 +9,7 @@ import { PublicModeConnectionGateModal } from "./PublicModeConnectionGateModal";
 import { PrivateModeConnectionGateModal } from "./PrivateModeConnectionGateModal";
 import { ViewPrivateAddressMnemonicModal } from "./ViewPrivateAddressMnemonicModal/ViewPrivateAddressMnemonicModal";
 import { ViewOnlyKeyModal } from "./ViewOnlyKeyModal";
+import { GetPaymentLinkModal } from "./GetPaymentLinkModal";
 import { PrivateAddressDetailsModal } from "./PrivateAddressDetailsModal";
 import { CreatePrivateAddressWithPasswordModal } from "./CreatePrivateAddressWithPasswordModal/CreatePrivateAddressWithPasswordModal";
 import { RequestEncryptionKeyModal } from "./RequestEncryptionKeyModal";
@@ -44,6 +45,7 @@ export const ModalsIndex = () => {
   const isConnectPrivateAddressModalOpen = useModalStore((state) => state.isConnectPrivateAddressModalOpen);
   const isPrivacyPolicyModalOpen = useModalStore((state) => state.isPrivacyPolicyModalOpen);
   const isToolTipModalOpen = useModalStore((state) => state.isToolTipModalOpen);
+  const isGetPaymentLinkModalOpen = useModalStore((state) => state.isGetPaymentLinkModalOpen);
 
   // Get Private Address details
   const spendablePrivateTokens = usePrivateAddressStore((state) => state.spendablePrivateTokens);
@@ -122,6 +124,8 @@ export const ModalsIndex = () => {
       {isViewPrivateAddressMnemonicModalOpen && <ViewPrivateAddressMnemonicModal/>}
 
       {isViewOnlyKeyModalOpen && <ViewOnlyKeyModal/>}
+
+      {isGetPaymentLinkModalOpen && <GetPaymentLinkModal />}
       
       {isLoadingModalOpen && <LoadingModal />}
 

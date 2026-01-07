@@ -57,6 +57,14 @@ export const closeViewOnlyKeyModal = (): void => {
   useModalStore.setState({ isViewOnlyKeyModalOpen: false });
 };
 
+// Get Payment Link
+export const openGetPaymentLinkModal = (): void => {
+  useModalStore.setState({ isGetPaymentLinkModalOpen: true });
+};
+export const closeGetPaymentLinkModal = (): void => {
+  useModalStore.setState({ isGetPaymentLinkModalOpen: false });
+};
+
 // Private Address History
 export const openPrivateAddressHistoryModal = (): void => {
   useModalStore.setState({ isPrivateAddressHistoryModalOpen: true });

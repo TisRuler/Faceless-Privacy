@@ -22,12 +22,14 @@ export enum CardView {
 }
 
 export enum PrivateModeDestination {
+    LinkSendersAddress = "Link Sender's Address",
     PublicAddress = "Public Address",
     PrivateAddress = "Private Address",
 }
 
 export enum PublicModeDestination {
     ConnectedPrivateAddress = "Connected Private Address",
+    LinkSendersAddress = "Link Sender's Address",
     OtherPrivateAddress = "Any Private Address",
     OtherPublicAddress = "Any Public Address",
 }

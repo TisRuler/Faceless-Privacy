@@ -19,7 +19,8 @@ import { TXIDVersion } from "@railgun-community/shared-models";
 import { ChainData } from "~~/src/config/chains/types";
 import { useAccount } from "wagmi";
 import { ScaledContainer } from "~~/src/shared/components/ScaledContainer";
-import { PublicModeDestination } from "~~/src/shared/enums";
+import { PublicModeDestination, PrivateModeDestination } from "~~/src/shared/enums";
+import { getPaymentLinkParams } from "../utils/transactions/proccessors/other/getPaymentLinkParams";
 import toast from "react-hot-toast";
 import cardBackground from "~~/src/assets/images/background/cardBackground.svg";
 
@@ -59,10 +60,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
   const tokenForPrivateMode = useWalletModeScreenStore((state) => state.tokenForPrivateMode);
   const privateModeDestination = useWalletModeScreenStore((state) => state.privateModeDestination);
   const isTransactionInProgress = useWalletModeScreenStore((state) => state.isTransactionInProgress);
-
   const feeDataToDisplay = useWalletModeScreenStore((state) => state.feeDataToDisplay);
-
-  const { isConnected: isPublicWalletConnected, address: yourPublicAddress } = useAccount();
 
   const {
     setRecipientAddress,
@@ -71,21 +69,49 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
     setPrivateModeDestination,
     setFeeDataToDisplay,
   } = useWalletModeScreenStore.getState();
-    
-  useEffect(() => {
-    const isRecipientConnectedPrivateAddress = 
-      publicModeDestination === PublicModeDestination.ConnectedPrivateAddress &&
-      walletModeCardView === CardView.Public;
 
-    if (isRecipientConnectedPrivateAddress) {
+  const isViewingPublicSide = walletModeCardView === CardView.Public;
+
+  const { isConnected: isPublicWalletConnected, address: yourPublicAddress } = useAccount();
+
+  // Function called by useEffects
+  const setDefaultInputs = () => {
+    setAmount("0");
+
+    const isViewingPublicAddressUsage = walletModeCardView === CardView.Public;
+
+    // - Handle users who came from a payment link first
+    const paymentLink = getPaymentLinkParams();
+        
+    if (paymentLink.recipientRailgunAddress && paymentLink.valid) {
+      if (isViewingPublicAddressUsage) {
+        setPublicModeDestination(PublicModeDestination.LinkSendersAddress);
+        setRecipientAddress(paymentLink.recipientRailgunAddress);
+        return;
+      } else {
+        setPrivateModeDestination(PrivateModeDestination.LinkSendersAddress);
+        setRecipientAddress(paymentLink.recipientRailgunAddress);
+        return;
+      }
+    }
+    
+    // - Handle non-payment link related user
+    if (isViewingPublicAddressUsage) {
+      setPublicModeDestination(PublicModeDestination.ConnectedPrivateAddress);
       setRecipientAddress(yourPrivateAddress);
     } else {
+      setPrivateModeDestination(PrivateModeDestination.PublicAddress);
       setRecipientAddress("");
     }
+  };
 
-    setAmount("0");
-    setFeeDataToDisplay(undefined);
-        
+  // UseEffects
+  useEffect(() => {
+    setDefaultInputs();
+  }, []);
+
+  useEffect(() => {
+    setDefaultInputs();
   }, [walletModeCardView]);
 
   useEffect(() => {
@@ -100,7 +126,8 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
     tokenForPrivateMode, 
     broadcasterFeeToken,
     privateModeDestination,
-    customSelectedBroadcaster
+    customSelectedBroadcaster,
+    walletModeCardView,
   ]);
 
   return (
@@ -115,7 +142,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
             backgroundPosition: "center",
           }}
         >
-          {/* ---- Overlay intercept ---- */}
+          {/* Overlay intercept */}
           {isTransactionInProgress && (
             <div
               className="absolute inset-0 z-50 cursor-pointer"
@@ -130,7 +157,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
             walletModeCardView={walletModeCardView} 
             setWalletModeCardView={setWalletModeCardView} 
           />
-          {/* main block */}
+          {/* Main block */}
           <div className="border-blue w-full rounded-b-2xl border-[0.12em] sm:border">
             <div className="px-[5em] py-6">
               <WalletModeCardHeader 
@@ -139,7 +166,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                 yourPublicAddress={yourPublicAddress}
               />
               <div className="mt-2">
-                {walletModeCardView === CardView.Public ? (
+                {isViewingPublicSide ? (
                   <>   
                     <PublicModeAmountInput 
                       activeNetwork={activeNetwork}
@@ -151,7 +178,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                     <PublicModeRecipientInput 
                       recipientAddress={recipientAddress}
                       destination={publicModeDestination}
-                      privateAddress={yourPrivateAddress}
+                      yourPrivateAddress={yourPrivateAddress}
                       setPublicModeDestination={setPublicModeDestination}
                       setRecipientAddress={setRecipientAddress}
                     />

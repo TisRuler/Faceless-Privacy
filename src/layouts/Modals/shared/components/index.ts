@@ -18,3 +18,4 @@ export * from "./ModalPrivateScanProgress";
 export * from "./ModalTitleWithToggle";
 export * from "./ModalToggleTokensView";
 export * from "./ModalTokenCard";
+export * from "./ModalCopyCard";
