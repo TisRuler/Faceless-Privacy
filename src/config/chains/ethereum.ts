@@ -37,6 +37,10 @@ export const EthereumData: ChainData = {
       address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       commonQuantitys: ["0.1", "1", "10", "100"],
     },
+    {
+      address: "0x085780639cc2cacd35e474e71f4d000e2405d8f6",
+      commonQuantitys: ["25", "50", "500", "1000"],
+    },
   ],
   defaultPrivacyPoolTokenList: [] = [
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -71,6 +75,11 @@ export const EthereumData: ChainData = {
     "0xdac17f958d2ee523a2206206994597c13d831ec7": {
       logoUri: TokenLogo.Tether,
       tokenPriceApi: "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd",
+    },
+    "0x085780639cc2cacd35e474e71f4d000e2405d8f6": {
+      logoUri: TokenLogo.FxUsd,
+      tokenPriceApi: "", // CoinGecko does'nt have fxUSD’s price data available via API yet
+      additionalInfo: "f(x) Protocol is launching a fee-claim rebate program.\n\nThis program will allow users to reclaim some Railgun fees incurred during shielding.\n\nNote: f(x) Protocol is operated by a third party.\nDo your own research. Learn more [here](https://fx.aladdin.club).",
     },
   } as { [key: string]: { logoUri: string, tokenPriceApi: string } },
 

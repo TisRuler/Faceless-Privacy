@@ -1,6 +1,7 @@
 import { RailgunWalletBalanceBucket } from "@railgun-community/shared-models";
 import { UserToken } from "~~/src/shared/types";
 import { formatDisplayNumber } from "~~/src/shared/utils/tokens/formatDisplayBalance";
+import { Tooltip } from "~~/src/shared/components/Tooltip";
 import Image from "next/image";
 
 const NON_SPENDABLE_BUCKETS = "nonSpendable";
@@ -67,13 +68,24 @@ export const ModalTokenCard: React.FC<ModalTokenCardProps> = ({ token, type, sho
         )}
         
         <div className="ml-4 whitespace-nowrap font-isb">
-          <p className={"text-sm sm:text-base"}>
-            {type === RailgunWalletBalanceBucket.ShieldPending
-              ? "Pending Funds (Incoming)"
-              : type === NON_SPENDABLE_BUCKETS
-                ? `${token.category} •`
-                : token.symbol}
-          </p>
+          <div className="inline-flex">
+            <span className="text-sm sm:text-base">
+              {type === RailgunWalletBalanceBucket.ShieldPending
+                ? "Pending Funds (Incoming)"
+                : type === NON_SPENDABLE_BUCKETS
+                  ? `${token.category} •`
+                  : token.symbol}
+            </span>
+
+            {token.additionalInfo && (
+              <Tooltip
+                title={`Additional Token info`}
+                tip={token.additionalInfo}
+                className="mt-[0.25em]"
+              />
+            )}
+          </div>
+
           <p className="font-im text-sm text-modal-100">
             {token.name}
           </p>

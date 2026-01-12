@@ -13,6 +13,7 @@ export type UserToken = {
     chainId: SupportedChainId;
     address: string;
     category?: RailgunWalletBalanceBucket; // used on private tokens only
+    additionalInfo?: string;
     isBaseToken?: boolean;
 }
 
@@ -23,6 +24,7 @@ export type Token = {
     logoURI: string | undefined;
     chainId: SupportedChainId;
     address: string;
+    additionalInfo?: string;
     isBaseToken?: boolean;
 }
 

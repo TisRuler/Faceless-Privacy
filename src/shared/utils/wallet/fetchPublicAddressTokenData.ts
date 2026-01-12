@@ -38,6 +38,7 @@ export const fetchPublicAddressTokenData = async (
       address: tokenAddress,
       balance,
       totalValueInUsd,
+      additionalInfo: network.popularTokenMetadata[tokenAddress.toLowerCase()].additionalInfo,
       ...tokenMetaData,
     };
   } catch (error) {

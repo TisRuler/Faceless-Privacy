@@ -33,6 +33,7 @@ export type ChainData = {
 type TokenMetadata = {
   logoUri: string;
   tokenPriceApi: string;
+  additionalInfo?: string;
 };
 
 type PopularTokenMetadata = Record<string, TokenMetadata>;
