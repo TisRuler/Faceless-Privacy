@@ -82,13 +82,13 @@ export const PrivateModeFeeDetails: React.FC<PrivateModeFeeDetailsProps> = ({
           {isUnshield && 
             <div className="flex justify-between">
               <p>Railgun fee</p>
-              <p>{formatDisplayNumber(railgunFee.amount)} {broadcasterFee.token.symbol}</p>
+              <p>{formatDisplayNumber(railgunFee.amount)} {railgunFee.token.symbol}</p>
             </div>
           }
           {showTotalFee && 
             <div className="flex justify-between">
               <p>Total Fee</p>
-              <p>{formatDisplayNumber(totalFee!.amount)} {broadcasterFee.token.symbol}</p>
+              <p>{formatDisplayNumber(totalFee!.amount)} {totalFee!.token.symbol}</p>
             </div>
           }
         </div>
