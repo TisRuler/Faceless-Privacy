@@ -31,13 +31,14 @@ export const EthereumSepoliaData: ChainData = {
     chainId: 11155111,
   },
 
-  // Privacy pool viewing
   defaultShieldingTokensList: [
     {
       address: "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
       commonQuantitys: ["0.01", "0.05", "0.1", "0.5"],
     },
   ],
+  
+  // Privacy pool viewing
   defaultPrivacyPoolTokenList: [] = [
     "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
   ], 

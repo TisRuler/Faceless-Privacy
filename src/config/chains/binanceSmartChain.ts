@@ -31,13 +31,14 @@ export const BinanceSmartChainData: ChainData = {
     chainId: 56,
   },
   
-  // Privacy pool viewing
   defaultShieldingTokensList: [
     {
       address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       commonQuantitys: ["0.01", "0.2", "1", "3"],
     },
   ],
+
+  // Privacy pool viewing
   defaultPrivacyPoolTokenList: [] = [
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
   ],

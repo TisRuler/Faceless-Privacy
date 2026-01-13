@@ -30,10 +30,11 @@
 //     symbol: "WPOL",
 //     },
 
-//     // Privacy pool viewing
 //     defaultShieldingTokensList: [
 //     { address: "0x21d4Ec3C9a2408C5535ecc26a09d94dC7B7f5c10", commonQuantitys: ["0.01", "0.05", "0.075", "1"] },
 //   ],
+
+//     // Privacy pool viewing
 //     defaultPrivacyPoolTokenList: "0x21d4Ec3C9a2408C5535ecc26a09d94dC7B7f5c10",
 //     batchConfig: {
 //      customBlocksPerBatch: 12000,

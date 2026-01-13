@@ -31,7 +31,6 @@ export const ArbitrumData: ChainData = {
     chainId: 42161
   },
 
-  // Privacy pool viewing
   defaultShieldingTokensList: [
     {
       address: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
@@ -54,6 +53,8 @@ export const ArbitrumData: ChainData = {
       commonQuantitys: ["0.01", "0.05", "0.5", "1"],
     },
   ],
+  
+  // Privacy pool viewing
   defaultPrivacyPoolTokenList: [] = [
     "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     "0xaf88d065e77c8cc2239327c5edb3a432268e5831",

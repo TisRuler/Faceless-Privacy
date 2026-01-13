@@ -31,7 +31,6 @@ export const EthereumData: ChainData = {
     chainId: 1,
   },
 
-  // Privacy pool viewing
   defaultShieldingTokensList: [
     {
       address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -50,6 +49,8 @@ export const EthereumData: ChainData = {
       commonQuantitys: ["25", "50", "500", "1000"],
     },
   ],
+  
+  // Privacy pool viewing
   defaultPrivacyPoolTokenList: [] = [
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "0x6b175474e89094c44da98b954eedeac495271d0f",
