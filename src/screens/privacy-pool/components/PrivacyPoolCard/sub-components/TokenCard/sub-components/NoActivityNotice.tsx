@@ -30,14 +30,9 @@ export const NoActivityNotice: React.FC<NoActivityNoticeProps> = ({ transactionD
           No {activityType} added in the last few days.
         </h3>
       ) : (
-        <div>
-          <h3 className="mb-2 ml-2 font-im">
-            No recent {activityType} found in the last few hours,
-          </h3>
-          <h3 className="ml-2 font-im">
-            Consider adding a custom RPC for a longer history.
-          </h3>
-        </div>
+        <h3 className="mb-2 ml-2 font-im">
+          No recent {activityType} found in the last few hours.
+        </h3>
       )}
     </>
   );    
