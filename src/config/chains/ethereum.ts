@@ -38,6 +38,14 @@ export const EthereumData: ChainData = {
       commonQuantitys: ["0.1", "1", "10", "100"],
     },
     {
+      address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+      commonQuantitys: ["100", "1000", "10000", "50000"],
+    },
+    {
+      address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      commonQuantitys: ["100", "1000", "10000", "20000"],
+    },
+    {
       address: "0x085780639cc2cacd35e474e71f4d000e2405d8f6",
       commonQuantitys: ["25", "50", "500", "1000"],
     },
