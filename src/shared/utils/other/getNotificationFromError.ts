@@ -12,6 +12,7 @@ import { isProviderError } from "./isProviderError";
 import { isBroadcasterError } from "./isBroadcasterError";
 import { isNoteAlreadySpentError } from "./isNoteAlreadySpentError";
 import { useBroadcasterStore } from "~~/src/state-managers";
+import { BroadcasterConnectionStatus } from "@railgun-community/shared-models";
 
 export function getNotificationFromError(error: unknown, backupDefaultNotification?: string): string {
 
@@ -67,6 +68,13 @@ export function getNotificationFromError(error: unknown, backupDefaultNotificati
 // Helper
 const getBroadcasterNofication = () => {
   const sendMethod = useBroadcasterStore.getState().sendMethod;
+
+  const broadcasterConnectionStatus = useBroadcasterStore.getState().broadcasterConnectionStatus;
+
+  if (broadcasterConnectionStatus === BroadcasterConnectionStatus.Searching) {
+    return "Try Again, Searching For a Broadcaster";
+  }
+
   const isDefaultBroadcaster = sendMethod === "DEFAULT_BROADCASTER";
   const defaultBroadcasterTxFailCount = useBroadcasterStore.getState().defaultBroadcasterTxFailCount;
 
