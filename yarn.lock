@@ -1959,10 +1959,10 @@
   resolved "https://registry.yarnpkg.com/@railgun-community/shared-models/-/shared-models-8.0.0.tgz#689d4f6a3a80060e018abeb1b351cc711f97e77c"
   integrity sha512-JY2HOobRlZpX9CsfiOfbjA2zmG3qLYA/QUupfz0V3ERUErQIm1ZQBSdMfVDZWhflW/4As+rbsY7vc3rXLGbpvA==
 
-"@railgun-community/waku-broadcaster-client-web@9.0.1":
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/@railgun-community/waku-broadcaster-client-web/-/waku-broadcaster-client-web-9.0.1.tgz#fca266b1c0b865588a6c87f4625942f2eefc623a"
-  integrity sha512-It0Y0v7gYT+CeHJm+UX3N4I+AA2FSSGQSbwFtdnVcvVrboVTQEPAM7/uyVLTwBG0MvwAO6MyQi9RvYdG/pxV8w==
+"@railgun-community/waku-broadcaster-client-web@9.0.3":
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/@railgun-community/waku-broadcaster-client-web/-/waku-broadcaster-client-web-9.0.3.tgz#f4493d3b572017e4605e737dc0fc2c6f1612300c"
+  integrity sha512-r4dwsz22m1I0lsWTGJVwvMKbQcKYRtx+MWdghyhXv1yeWMHQRWUNu4KGHAWddbznDrKUZIXZDRgtLgwBLjfSKg==
   dependencies:
     "@waku/discovery" "^0.0.13"
     "@waku/sdk" "^0.0.36"

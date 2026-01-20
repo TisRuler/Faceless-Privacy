@@ -19,7 +19,7 @@
     "@heroicons/react": "2.2.0",
     "@next/bundle-analyzer": "14.2.4",
     "@railgun-community/shared-models": "8.0.0",
-    "@railgun-community/waku-broadcaster-client-web": "9.0.1",
+    "@railgun-community/waku-broadcaster-client-web": "9.0.3",
     "@railgun-community/wallet": "10.8.0",
     "@tanstack/react-query": "5.28.6",
     "bip39": "3.1.0",
