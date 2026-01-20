@@ -53,7 +53,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           }}
           className="cursor-pointer border border-r-0 border-main-base bg-primary-button-gradient px-4 py-2"
         >
-          <XMarkIcon className="ml-6 h-5 w-4 text-main-base sm:ml-0 sm:h-6 sm:w-5" />
+          <XMarkIcon className="h-5 w-4 text-main-base sm:h-6 sm:w-5" />
         </button>
       )}
 
