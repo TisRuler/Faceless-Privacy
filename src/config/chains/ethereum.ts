@@ -88,7 +88,7 @@ export const EthereumData: ChainData = {
     "0x085780639cc2cacd35e474e71f4d000e2405d8f6": {
       logoUri: TokenLogo.FxUsd,
       tokenPriceApi: "", // CoinGecko does'nt have fxUSD’s price data available via API yet
-      additionalInfo: "f(x) Protocol is launching a fee-claim rebate program.\n\nThis program will allow users to reclaim some Railgun fees incurred during shielding.\n\nNote: f(x) Protocol is operated by a third party.\nDo your own research. Learn more [here](https://fx.aladdin.club).",
+      additionalInfo: "f(x) Protocol is launching a fee-claim rebate program.\n\nThis program will allow users to reclaim some Railgun fees incurred during shielding.\n\nNote: f(x) Protocol is operated by a third party.\nDo your own research. Learn more [here](https://fx.aladdin.club/v2/railgun-airdrop).",
     },
   } as { [key: string]: { logoUri: string, tokenPriceApi: string } },
 
