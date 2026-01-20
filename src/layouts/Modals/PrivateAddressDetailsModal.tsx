@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { usePrivateAddressStore } from "~~/src/state-managers";
-import { ModalFrame, ModalTitle, ModalInfoCard, LocalStorageWarning } from "./shared/components";
-import { CheckCircleIcon, DocumentDuplicateIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { handleCopyToClipboard } from "./shared/utils/handleCopyToClipboard";
+import { 
+  ModalFrame, 
+  ModalTitle, 
+  ModalInfoCard, 
+  ModalCopyCard, 
+  LocalStorageWarning 
+} from "./shared/components";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { 
   openViewPrivateAddressMnemonicModal, 
   openViewOnlyKeyModal, 
@@ -23,17 +28,8 @@ const StyledChevronIcon = () => {
 export const PrivateAddressDetailsModal = () => {
 
   const yourPrivateAddress = usePrivateAddressStore((state) => state.yourPrivateAddress);
-  const [addressCopied, setAddressCopied] = useState(false);
   
   const isReconnectionTypePasswordOrUknown = isRailgunWalletReconnectionTypePasswordOrUnknown();
-
-  const handleCopyClick = () => { 
-    handleCopyToClipboard(yourPrivateAddress);
-    setAddressCopied(true);
-    setTimeout(() => {
-      setAddressCopied(false);
-    }, 2000);
-  };
 
   const handleViewYourSeedPhrase = () => {
     closePrivateAddressDetailsModal(); // close modal
@@ -58,25 +54,9 @@ export const PrivateAddressDetailsModal = () => {
 
         <LocalStorageWarning />
 
-        <ModalInfoCard
+        <ModalCopyCard
           title="Your Address"
-          body={yourPrivateAddress}
-          icon={
-            addressCopied ? (
-              <CheckCircleIcon
-                className="ml-1 h-6 w-4 cursor-pointer text-xl font-normal"
-                aria-hidden="true"
-                strokeWidth={2}
-              />
-            ) : (
-              <DocumentDuplicateIcon
-                className="ml-1 h-6 w-4 cursor-pointer text-xl font-normal"
-                aria-hidden="true"
-                strokeWidth={1.8}
-              />
-            )
-          }
-          onClick={handleCopyClick}
+          textToBeCopied={yourPrivateAddress}
         />
 
         <ModalInfoCard

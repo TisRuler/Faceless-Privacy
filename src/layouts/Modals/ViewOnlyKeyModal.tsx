@@ -2,21 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import { 
   ModalFrame, 
   ModalTitle, 
-  ModalInfoCard,
+  ModalCopyCard,
   ModalInfoBox
 } from "./shared/components";
 import { closeViewOnlyKeyModal } from "./modalUtils";
 import { usePrivateAddressStore } from "~~/src/state-managers";
 import { getWalletShareableViewingKey } from "@railgun-community/wallet";
-import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { handleCopyToClipboard } from "./shared/utils/handleCopyToClipboard";
 import { VerifyOwnershipPanel } from "./shared/panels";
 import { getNotificationFromError } from "~~/src/shared/utils/other/getNotificationFromError";
 import { logError } from "~~/src/shared/utils/other/logError";
 import toast from "react-hot-toast";
 
 export const ViewOnlyKeyModal = () => {
-  const [addressCopied, setAddressCopied] = useState(false);
   const [isUnlockSection, setIsUnlockSection] = useState(true);
 
   const viewingKeyRef = useRef<string>(""); // Ephemeral storage for parent usage
@@ -32,12 +29,6 @@ export const ViewOnlyKeyModal = () => {
       toast.error(getNotificationFromError(error));
       logError(error);
     }
-  };
-
-  const handleClick = () => { 
-    handleCopyToClipboard(viewingKeyRef.current);
-    setAddressCopied(true);
-    setTimeout(() => setAddressCopied(false), 2000);
   };
 
   useEffect(() => {
@@ -60,25 +51,9 @@ export const ViewOnlyKeyModal = () => {
             <ModalInfoBox>
               Reminder: Be selective with who you share this with.
             </ModalInfoBox>
-            <ModalInfoCard
+            <ModalCopyCard
               title="Key"
-              body={viewingKeyRef.current}
-              icon={
-                addressCopied ? (
-                  <CheckCircleIcon
-                    className="ml-1 h-6 w-4 cursor-pointer text-xl font-normal"
-                    aria-hidden="true"
-                    strokeWidth={2}
-                  />
-                ) : (
-                  <DocumentDuplicateIcon
-                    className="ml-1 h-6 w-4 cursor-pointer text-xl font-normal"
-                    aria-hidden="true"
-                    strokeWidth={1.8}
-                  />
-                )
-              }
-              onClick={handleClick}
+              textToBeCopied={viewingKeyRef.current}
             />
           </>
         )}
