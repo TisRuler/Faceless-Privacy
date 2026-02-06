@@ -1,5 +1,5 @@
-import React from "react";
-import { useSettingsStore, useWalletModeScreenStore } from "~~/src/state-managers";
+import { useEffect } from "react";
+import { useSettingsStore, useWalletModeScreenStore, useUiStore } from "~~/src/state-managers";
 import { 
   WalletModeCard,
   TransactionLinkTab,
@@ -8,10 +8,11 @@ import {
 import { CardView } from "~~/src/shared/enums";
 import { WalletActionExplanation } from "./components/WalletActionExplanation";
 import { Tooltip } from "~~/src/shared/components/Tooltip";
+import { openToolTipModal } from "~~/src/layouts/Modals/modalUtils";
 
 export const WalletModeScreen = () => {
 
-  // get states
+  // Get states
   const activeNetwork = useSettingsStore((state) => state.activeNetwork);
   const walletModeCardView = useSettingsStore((state) => state.walletModeCardView);
 
@@ -19,6 +20,20 @@ export const WalletModeScreen = () => {
   const privateModeTxHash = useWalletModeScreenStore((state) => state.privateModeTxHash);
 
   // const displayBroadcasterNotices = walletModeCardView === CardView.Private;
+
+  // Handle Ui
+  useEffect(() => {
+    const hasDisplayedIntro = useUiStore.getState().hasDisplayedIntro;
+
+    if (!hasDisplayedIntro) {
+      const title = "Faceless";
+      const tip = "We give your regular wallets like MetaMask a\nRailgun private address.\n\nAs a result, you can send / receive crypto privately.\n\nMost users use their private address to unlink their crypto from their identity before moving the funds to a fresh public address.";
+
+      openToolTipModal(title, tip);
+      useUiStore.getState().setHasDisplayedIntro(true);
+    }
+
+  }, [])
 
   const tooltipText = 
     "Faceless gives wallets like MetaMask a private address.\n\n" +

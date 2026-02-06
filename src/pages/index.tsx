@@ -1,13 +1,12 @@
-import type { NextPage } from "next";
-import { LaunchPad } from "../screens/LaunchPad";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-const Home: NextPage = () => {
+export default function IndexPage() {
+  const router = useRouter();
 
-  return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <LaunchPad />
-    </div>
-  );
-};
+  useEffect(() => {
+    router.replace("/wallet");
+  }, [router]);
 
-export default Home;
+  return null;
+}
