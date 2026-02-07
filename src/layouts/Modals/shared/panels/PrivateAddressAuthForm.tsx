@@ -3,7 +3,8 @@ import {
   ModalCentreMessage, 
   ModalPasswordInput, 
   ModalActionButton, 
-  ModalFooterLink 
+  ModalFooterLink, 
+  ModalInfoBox
 } from "../components";
 import { ConnectWalletPanel } from "./ConnectWalletPanel";
 import { ConnectorRoles } from "~~/src/state-managers";
@@ -175,7 +176,9 @@ export const PrivateAddressAuthForm: React.FC<PrivateAddressAuthFormProps> = ({
             />
           ) : (
             <>
-
+              <ModalInfoBox isStringWithLink={true}>
+                For information about how your private address is generated, click [here](https://faceless-privacy.gitbook.io/docs/general-information/technical-info#how-your-private-address-is-generated).
+              </ModalInfoBox>
               {isSignatureSectionDisplayed ? (
                 <ModalActionButton 
                   onClick={() => toast.success("Check Your Wallet", { duration: 4000 })} 
