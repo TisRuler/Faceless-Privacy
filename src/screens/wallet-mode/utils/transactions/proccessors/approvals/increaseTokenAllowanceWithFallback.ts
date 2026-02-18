@@ -1,6 +1,5 @@
 import { PublicModeButtonState } from "../../../enums";
-import { approveToken } from "./approveToken";
-import { resetTokenApproval } from "./resetTokenApproval";
+import { approveToken, increaseTokenAllowance, resetTokenApproval } from "./";
 import { isUserRejectionError } from "~~/src/shared/utils/other/isUserRejectionError";
 import { FallbackProvider, JsonRpcProvider, JsonRpcSigner } from "ethers";
 import { SupportedChainId } from "~~/src/shared/types";
@@ -11,7 +10,7 @@ import { throwErrorWithTitle } from "~~/src/shared/utils/other/throwErrorWithTit
   shieldToken first checks if the token is already approved.
   If approved, it proceeds to execute shieldTokenLogic.
 
-  If not, it attempts to call `increaseAllowance`.
+  If not, it attempts to call `increaseTokenAllowance`.
   If the token contract doesn't support it (typical of poorly implemented ERC-20s),
   the call fails and triggers a fallback: reset allowance to 0, then issue a new `approve`.
 
@@ -30,14 +29,18 @@ export async function approveTokenWithFallback(
 ): Promise<void> {
 
   try {
-    await performApproval(
+    // Increase token allowance
+    await performActionWithUi(
       provider,
-      tokenAddress,
-      publicAddress,
-      amount,
-      anonymityPoolAddress,
-      publicWalletSigner,
-      chainId,
+      () => increaseTokenAllowance(
+        tokenAddress,
+        publicAddress,
+        amount,
+        anonymityPoolAddress,
+        publicWalletSigner,
+        chainId,
+      ),
+      "increaseTokenAllowance tx failed",
       setPublicModeButtonText
     );
   } catch (error) {
@@ -59,41 +62,33 @@ export async function approveTokenWithFallback(
       throw new Error("increaseAllowance tx failed");
     };
 
-    await performApproval(
+    // Approve token
+    await performActionWithUi(
       provider,
-      tokenAddress,
-      publicAddress,
-      amount,
-      anonymityPoolAddress,
-      publicWalletSigner,
-      chainId,
+      () => approveToken(
+        tokenAddress,
+        amount,
+        anonymityPoolAddress,
+        publicWalletSigner,
+        chainId,
+      ),
+      "approveToken tx failed",
       setPublicModeButtonText
     );
   }
 };
   
-// Helper
-async function performApproval(
+// Main
+async function performActionWithUi(
   provider: FallbackProvider | JsonRpcProvider,
-  tokenAddress: string,
-  publicAddress: string,
-  amount: string,
-  anonymityPoolAddress: string,
-  signer: JsonRpcSigner, 
-  chainId: SupportedChainId,
+  action: () => Promise<any>,
+  backupErrorMessage: string,
   setPublicModeButtonText?: React.Dispatch<React.SetStateAction<string>>,
 ) {
   setPublicModeButtonText?.(PublicModeButtonState.WaitingForConfirmation);
-  const approvalTx = await approveToken(
-    tokenAddress,
-    publicAddress,
-    amount,
-    anonymityPoolAddress,
-    signer,
-    chainId,
-  );
+  const actionTx = await action();
   setPublicModeButtonText?.(PublicModeButtonState.Approving);
-  const receipt = await provider.waitForTransaction(approvalTx.hash);
+  const receipt = await provider.waitForTransaction(actionTx.hash);
     
-  if (!receipt || receipt.status !== 1) throw new Error("increaseAllowance tx failed");
+  if (!receipt || receipt.status !== 1) throw new Error(backupErrorMessage);
 };

@@ -7,11 +7,9 @@ import { GENERAL_NOTIFICATIONS } from "~~/src/constants/notifications";
 import { throwErrorWithTitle } from "~~/src/shared/utils/other/throwErrorWithTitle";
 import ERC20Abi from "~~/src/assets/abis/ERCAbi.json";
 
-/**
- * Assumes allowance < amount & receiver is valid; must be validated externally.
- */
-export const approveToken = async (
+export const increaseTokenAllowance = async (
   tokenAddress: string,
+  publicAddress: string,
   amount: string,
   anonymityPoolAddress: string,
   publicWalletSigner: JsonRpcSigner,
@@ -20,18 +18,17 @@ export const approveToken = async (
   try {
 
     const tokenContractReadOnly = await getCachedEthersERC20Contract(chainId, tokenAddress);
+    const allowance = await tokenContractReadOnly.allowance(publicAddress, anonymityPoolAddress);
     const tokenDecimals = await getCachedTokenDecimals(chainId, tokenContractReadOnly, tokenAddress);
     const formattedAmountToShield = parseUnits(amount, tokenDecimals);
 
     const tokenContractWithSigner = new Contract(tokenAddress, ERC20Abi, publicWalletSigner);
+    const neededIncrease = formattedAmountToShield - allowance;
 
-    const tx = await tokenContractWithSigner.approve(
-      anonymityPoolAddress,
-      formattedAmountToShield
-    );
-
+    // Attempt to increase allowance not all contracts work for this, so if it fails, use a fallback method
+    const tx = await tokenContractWithSigner.increaseAllowance(anonymityPoolAddress, neededIncrease);
     return tx;
-
+    
   } catch (error) {
     if (isUserRejectionError(error)) {
       throwErrorWithTitle(GENERAL_NOTIFICATIONS.USER_REJECTION, error);
