@@ -38,7 +38,7 @@ export const fetchPublicAddressTokenData = async (
       address: tokenAddress,
       balance,
       totalValueInUsd,
-      additionalInfo: network.popularTokenMetadata[tokenAddress.toLowerCase()].additionalInfo,
+      additionalInfo: network.popularTokenMetadata[tokenAddress.toLowerCase()]?.additionalInfo,
       ...tokenMetaData,
     };
   } catch (error) {
@@ -63,7 +63,7 @@ const getTokenBalanceAndValue = async (
   // Handle handle raw balance
   try {
     rawBalance = await withRetry(() => contract.balanceOf(walletAddress), "contract.balanceOf(walletAddress)");
-  } catch {
+  } catch (error) {
     rawBalance = undefined;
   }
 
@@ -77,7 +77,7 @@ const getTokenBalanceAndValue = async (
   // Handle Value
   try {
     tokenPrice = await getCachedTokenPrice(network, tokenAddress);
-  } catch {
+  } catch (error) {
     tokenPrice = undefined;
   }
 
