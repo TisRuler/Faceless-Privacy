@@ -4,7 +4,7 @@ import { WALLET_MODE_NOTIFICATIONS } from "~~/src/constants/notifications";
 import { useBroadcasterStore } from "~~/src/state-managers";
 import { SelectedBroadcaster } from "@railgun-community/shared-models";
 
-const DEFAULT_RAILGUN_ADDRESS = "0zk1qy09dy4v0rngraluhyt726847trzdfahr9q27kh3csxygj3cuh55lrv7j6fe3z53l7xv6xxjnprk3aylejxmryfu5v4aw5rc8kka2z0t4t8neaqx48ucwlecevf";
+const DEFAULT_RAILGUN_ADDRESS = "0zk1qyr6prgl0jdhp826nt8e56tq667la4zavwa5jzxe26g8fnqafd2f0rv7j6fe3z53ll0p6eyzhx87a98ed4dkhsx5r8cc0ggmqvt6wzqtgqsywq9tq4tnz5ra2ws";
 
 // Helper
 const pickRandomBroadcaster = (broadcasters: SelectedBroadcaster[]) => {
@@ -34,7 +34,7 @@ export const getDefaultBroadcasterForToken = async () => {
     const selectedBroadcaster = broadcasters.find(
       (b) => b.railgunAddress === DEFAULT_RAILGUN_ADDRESS
     );
-    
+
     if (selectedBroadcaster) {
       return selectedBroadcaster;
     }
