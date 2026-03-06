@@ -39,7 +39,6 @@ export const masterConfig = {
   networks: chainIdToNetworkConfig,
   viem: viemClientSettings, // Used for providers and public wallet connection/usage
   PoiNodeUrl: "https://ppoi-agg.horsewithsixlegs.xyz", 
-  pubSubTopic: "/waku/2/rs/0/1",
   peerDiscoveryTimeout: 25000,
   facelessAccessMessage: "Faceless - Sign only to access your private address. Beware of impersonators.",
   baseUrl: "https://facelessprivacy.eth.limo",
