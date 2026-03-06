@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSettingsStore, useBroadcasterStore } from "~~/src/state-managers";
 import { SettingsPanelMaker } from "../../shared/panels";
-import { ModalFooterLink } from "../../shared/components";
+import { ModalFooterLink, ModalInfoBox } from "../../shared/components";
 import { useBroadcasterMethodStatus } from "~~/src/shared/hooks/useBroadcasterMethodStatus";
 
 interface PrivateModeMethodPanelProps {
@@ -54,6 +54,11 @@ export const PrivateModeMethodPanel: React.FC<PrivateModeMethodPanelProps> = ({
 
   return (
     <>
+      {isUsingSelfSignMethod && 
+        <ModalInfoBox isStringWithLink={true}>
+          If you have any problems while self-signing, click [here](https://faceless-privacy.gitbook.io/docs/essential-user-guide/help#need-help-with-self-signing).
+        </ModalInfoBox>
+      }
       <SettingsPanelMaker
         isOptionSelected={isHoveringOptionSelected}
         hoveringOption={hoveringOption}

@@ -41,8 +41,8 @@ export const GetPaymentLinkModal = () => {
     <ModalFrame onExitClick={closeGetPaymentLinkModal} >
       <ModalTitle title="Private Address Payment Link" />
 
-      <ModalInfoBox>
-        The nickname you set will be displayed to anyone who opens the link.
+      <ModalInfoBox isStringWithLink={true}>
+        The nickname you set will be displayed to anyone who opens the link. Learn more [here](https://faceless-privacy.gitbook.io/docs/essential-user-guide/help#what-are-payment-links).
       </ModalInfoBox>
 
       {!link &&
