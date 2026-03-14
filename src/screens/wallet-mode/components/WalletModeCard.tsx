@@ -23,6 +23,7 @@ import { PublicModeDestination, PrivateModeDestination } from "~~/src/shared/enu
 import { getPaymentLinkParams } from "../utils/transactions/proccessors/other/getPaymentLinkParams";
 import toast from "react-hot-toast";
 import cardBackground from "~~/src/assets/images/background/cardBackground.svg";
+import { BuyWithFiatButton } from "../subComponents/Other/BuyWithFiatButton";
 
 interface WalletModeCardProps {
   activeNetwork: ChainData;
@@ -182,7 +183,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                       setPublicModeDestination={setPublicModeDestination}
                       setRecipientAddress={setRecipientAddress}
                     />
-                    <PublicModeActionButton 
+                    <PublicModeActionButton
                       activeNetwork={activeNetwork}
                       txIDVersion={txIDVersion}
                       tokenToSend={tokenForPublicMode}
@@ -192,6 +193,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                       customGweiAmount={customGweiAmount}
                       isTransactionInProgress={isTransactionInProgress}
                     />
+                    <BuyWithFiatButton yourPrivateAddress={yourPrivateAddress} />
                   </>
                 ) : (
                   <>
@@ -213,7 +215,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                         feeDataToDisplay={feeDataToDisplay}
                       />  
                     }  
-                    <PrivateModeActionButton 
+                    <PrivateModeActionButton
                       activeNetwork={activeNetwork}
                       txIDVersion={txIDVersion}
                       tokenToSend={tokenForPrivateMode}
@@ -225,6 +227,7 @@ export const WalletModeCard: React.FC<WalletModeCardProps> = ({
                       isTransactionInProgress={isTransactionInProgress}
                       setFeeDataToDisplay={setFeeDataToDisplay}
                     />
+                    <BuyWithFiatButton yourPrivateAddress={yourPrivateAddress} />
                   </>
                 )}
               </div>
