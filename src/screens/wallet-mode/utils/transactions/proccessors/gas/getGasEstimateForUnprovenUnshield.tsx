@@ -44,6 +44,8 @@ export async function getGasEstimateForUnprovenUnshield(
         maxPriorityFeePerGas,
       };
       break;
+      default:
+        throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
 
     const { gasEstimate } = await gasEstimateForUnprovenUnshield(
@@ -77,6 +79,8 @@ export async function getGasEstimateForUnprovenUnshield(
         maxPriorityFeePerGas,
       };
       break;
+      default:
+        throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
 
     return transactionGasDetails;

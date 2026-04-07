@@ -46,7 +46,6 @@ export async function getGasEstimateForUnprovenTransfer(
       };
       break;
     case EVMGasType.Type2:
-
       originalGasDetails = {
         evmGasType,
         gasEstimate: originalGasEstimate,
@@ -54,6 +53,8 @@ export async function getGasEstimateForUnprovenTransfer(
         maxPriorityFeePerGas,
       };
       break;
+    default:
+      throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
 
     const { gasEstimate } = await gasEstimateForUnprovenTransfer(
@@ -80,7 +81,6 @@ export async function getGasEstimateForUnprovenTransfer(
       };
       break;
     case EVMGasType.Type2:
-          
       transactionGasDetails = {
         evmGasType,
         gasEstimate,
@@ -88,9 +88,11 @@ export async function getGasEstimateForUnprovenTransfer(
         maxPriorityFeePerGas,
       };
       break;
+    default:
+      throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
 
-    return  transactionGasDetails;
+    return transactionGasDetails;
 
   } catch (error) {
     if (isBalanceToLowError(error)) {

@@ -28,61 +28,65 @@ export async function getGasEstimateForUnprovenUnshieldBaseToken(
 
     let originalGasDetails: TransactionGasDetails;
     switch (evmGasType) {
-    case EVMGasType.Type0:
-    case EVMGasType.Type1: // type 1 = sending with broadcaster
-      originalGasDetails = {
-        evmGasType,
-        gasEstimate: originalGasEstimate,
-        gasPrice,
-      };
-      break;
-    case EVMGasType.Type2:
-
-      originalGasDetails = {
-        evmGasType,
-        gasEstimate: originalGasEstimate,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      };
-      break;
+      case EVMGasType.Type0:
+      case EVMGasType.Type1: // type 1 = sending with broadcaster
+        originalGasDetails = {
+          evmGasType,
+          gasEstimate: originalGasEstimate,
+          gasPrice,
+        };
+        break;
+      case EVMGasType.Type2:
+        originalGasDetails = {
+          evmGasType,
+          gasEstimate: originalGasEstimate,
+          maxFeePerGas,
+          maxPriorityFeePerGas,
+        };
+        break;
+        default:
+          throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
+
     const { gasEstimate } = await gasEstimateForUnprovenUnshieldBaseToken(
       txIDVersion,
       network,
       recipientAddress,
-        railgunWalletId!,
-        encryptionKey,
-        wrappedERC20Amount,
-        originalGasDetails,
-        feeTokenDetails,
-        isUsingSelfSignMethod
+      railgunWalletId!,
+      encryptionKey,
+      wrappedERC20Amount,
+      originalGasDetails,
+      feeTokenDetails,
+      isUsingSelfSignMethod
     );
+
     let transactionGasDetails: TransactionGasDetails;
     switch (evmGasType) {
-    case EVMGasType.Type0:
-    case EVMGasType.Type1: 
-      transactionGasDetails = {
-        evmGasType,
-        gasEstimate,
-        gasPrice,
-      };
-      break;
-    case EVMGasType.Type2:
-          
-      transactionGasDetails = {
-        evmGasType,
-        gasEstimate,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      };
-      break;
+      case EVMGasType.Type0:
+      case EVMGasType.Type1:
+        transactionGasDetails = {
+          evmGasType,
+          gasEstimate,
+          gasPrice,
+        };
+        break;
+      case EVMGasType.Type2:
+        transactionGasDetails = {
+          evmGasType,
+          gasEstimate,
+          maxFeePerGas,
+          maxPriorityFeePerGas,
+        };
+        break;
+      default:
+        throw new Error(`Unsupported EVM gas type: ${evmGasType}`);
     }
 
     return transactionGasDetails;
 
   } catch (error) {
     if (isBalanceToLowError(error)) {
-      throwErrorWithTitle(WALLET_MODE_NOTIFICATIONS.BALANCE_TOO_LOW, error); 
+      throwErrorWithTitle(WALLET_MODE_NOTIFICATIONS.BALANCE_TOO_LOW, error);
     } else {
       throw error; // this sometimes errors when the gas fees put through are too low
     }
