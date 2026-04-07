@@ -22,7 +22,6 @@ export async function getGasEstimateForUnprovenTransfer(
   maxPriorityFeePerGas: bigint,
   feeTokenDetails: FeeTokenDetails | undefined,
   txIDVersion: TXIDVersion,
-  recipientAddress: string,
   encryptionKey: string,
   erc20AmountRecipients: RailgunERC20AmountRecipient[]
 ) {

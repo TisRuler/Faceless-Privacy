@@ -87,8 +87,7 @@ export async function estimatePrivateTokenTransferLogic({
     maxFeePerGasInWei, 
     maxPriorityFeePerGasInWei, 
     feeTokenDetails, 
-    txIDVersion, 
-    recipientAddress, 
+    txIDVersion,
     await requestEncryptionKey(), 
     erc20AmountRecipients
   );
