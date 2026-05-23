@@ -38,7 +38,7 @@ export const masterConfig = {
   initialActiveNetwork: EthereumData,
   networks: chainIdToNetworkConfig,
   viem: viemClientSettings, // Used for providers and public wallet connection/usage
-  PoiNodeUrl: "https://ppoi-agg.horsewithsixlegs.xyz", 
+  PoiNodeUrl: "https://ppoi.fdi.network/", 
   peerDiscoveryTimeout: 25000,
   facelessAccessMessage: "Faceless - Sign only to access your private address. Beware of impersonators.",
   baseUrl: "https://facelessprivacy.eth.limo",
