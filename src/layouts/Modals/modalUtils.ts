@@ -121,7 +121,7 @@ export const closeRequestEncryptionKeyModal = (): void => {
   useModalStore.setState({ isRequestEncryptionKeyModalOpen: false });
 };
 
-// Request Encryption Key
+// Select broadcaster
 export const openSelectBroadcasterModal = (): void => {
   useModalStore.setState({ isSelectBroadcasterModalOpen: true });
 };

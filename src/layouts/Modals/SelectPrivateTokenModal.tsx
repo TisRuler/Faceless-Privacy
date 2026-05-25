@@ -134,9 +134,12 @@ export const SelectPrivateTokenModal: React.FC<SelectPrivateTokenModalProps> = (
   const unwrappingMessage = `Any ${activeNetwork.privateModeBaseToken.symbol} sent to a public address through Faceless is automatically converted to ${activeNetwork.publicModeBaseToken.symbol}.`;
   const pendingTokensMessage = `The incoming tokens should be available within 1 hour.\nif not: Settings > Other > Generate All POIs.\n${unwrappingMessage}`;
   const ifTokensAreUnavailableMessage = "If your tokens aren't available within the next 15 minutes: Settings > Other > Generate All POIs.";
+  const feePayingTokenMessage = `Each broadcaster chooses which tokens they accept for payment. ${activeNetwork.privateModeBaseToken.symbol} has the most broadcasters for this chain.`;
 
   const modalInfoBoxText = showOnlyNonSpendable ? ifTokensAreUnavailableMessage : 
-    areAnyTokensPending ? pendingTokensMessage : unwrappingMessage;
+    areAnyTokensPending ? pendingTokensMessage : 
+    !isThisTokenBeingSentToRecipient ? feePayingTokenMessage : 
+    unwrappingMessage;
 
   const titleText = displayConnectPrivateAddressPanel ? "Connect Private Address" : "Select a Token";
 
