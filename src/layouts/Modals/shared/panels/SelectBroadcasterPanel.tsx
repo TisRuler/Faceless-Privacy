@@ -7,6 +7,8 @@ import { logError } from "~~/src/shared/utils/other/logError";
 import { useShouldBootstrapNetworkStack } from "~~/src/shared/hooks/useShouldBootstrapNetworkStack";
 import { useBroadcasterMethodStatus } from "~~/src/shared/hooks/useBroadcasterMethodStatus";
 import { ModalInfoBox } from "../../shared/components";
+import { ModalFooterLink } from "../../shared/components";
+import { closeSelectBroadcasterModal, openSelectPrivateTokenModal } from "../../modalUtils";
 
 const shortenAddress = (address: string) => `${address.slice(0, 4)}...${address.slice(-4)}`;
 
@@ -67,43 +69,53 @@ export const SelectBroadcasterPanel  = () => {
     }
   };
 
+    const switchToFeePayingToken = () => {
+      closeSelectBroadcasterModal();
+      openSelectPrivateTokenModal("tokenToPayTheFeeWith");
+    };
+    
+
   // Ui
   const messageToDisplay =
     isNoBroadcastersFound && isBroadcasterConnected
-      ? "No Broadcasters Found"
+      ? "No Broadcasters found for the token selected to pay the fee with"
       : mapBroadcasterStatusToMessage(broadcasterConnectionStatus);
 
   return (
-    <div className="max-h-[21.715em] overflow-y-scroll rounded-b-md">
-      {shouldBootstrapNetworkStack ? (
-        <ModalCentreMessage message="Connect a RPC then try again"/>
-      ) : isLoading ? (
-        <ModalCentreMessage message="Loading..."/>
-      ) : isNoBroadcastersFound ? (
-        <ModalCentreMessage message={messageToDisplay} />
-      ) : (
-        <>
-          <ModalInfoBox>Broadcasters send your private transactions for you safely.</ModalInfoBox>
+    <>
+      <div className="max-h-[21.715em] overflow-y-scroll rounded-b-md">
+        {shouldBootstrapNetworkStack ? (
+          <ModalCentreMessage message="Connect a RPC then try again"/>
+        ) : isLoading ? (
+          <ModalCentreMessage message="Loading..."/>
+        ) : isNoBroadcastersFound ? (
+          <ModalCentreMessage message={messageToDisplay} />
+        ) : (
+          <>
+            <ModalInfoBox>Broadcasters send your private transactions for you safely. These ones use {broadcasterFeeToken.symbol} as there fee</ModalInfoBox>
 
-          <ModalInfoCard
-            title="Default Broadcaster (Auto)"
-            icon={<ModalFlashingLight isActive={isUsingDefaultBroadcasterMethod} />}
-            onClick={() => setSendMethod({ method: "DEFAULT_BROADCASTER" })}
-          />
-      
-          {(broadcasterData as (SelectedBroadcaster & { broadcasterFee: number })[]).map(
-            (broadcaster, index) => (
-              <ModalInfoCard
-                key={broadcaster.railgunAddress}
-                title={`${index + 1}. ${shortenAddress(broadcaster.railgunAddress)}`}
-                body={`Reliability: ${broadcaster.tokenFee.reliability}\nFee Ratio: (${broadcaster.broadcasterFee} : 1 ${broadcasterFeeToken.symbol})`}
-                icon={<ModalFlashingLight isActive={isBroadcasterSelected(broadcaster)} />}
-                onClick={() => setSendMethod({ method: "CUSTOM_BROADCASTER", broadcaster: broadcaster })}
-              />
-            )
-          )}
-        </>
-      )}
-    </div>
+            <ModalInfoCard
+              title="Default Broadcaster (Auto)"
+              icon={<ModalFlashingLight isActive={isUsingDefaultBroadcasterMethod} />}
+              onClick={() => setSendMethod({ method: "DEFAULT_BROADCASTER" })}
+            />
+        
+            {(broadcasterData as (SelectedBroadcaster & { broadcasterFee: number })[]).map(
+              (broadcaster, index) => (
+                <ModalInfoCard
+                  key={broadcaster.railgunAddress}
+                  title={`${index + 1}. ${shortenAddress(broadcaster.railgunAddress)}`}
+                  body={`Reliability: ${broadcaster.tokenFee.reliability}\nFee Ratio: (${broadcaster.broadcasterFee} : 1 ${broadcasterFeeToken.symbol})`}
+                  icon={<ModalFlashingLight isActive={isBroadcasterSelected(broadcaster)} />}
+                  onClick={() => setSendMethod({ method: "CUSTOM_BROADCASTER", broadcaster: broadcaster })}
+                />
+              )
+            )}
+          </>
+        )}
+      </div>
+
+      {!shouldBootstrapNetworkStack && <ModalFooterLink isTagUnderACard={true} text="Switch token paying fee?" handleLinkClick={switchToFeePayingToken} />}
+    </>
   );   
 };
