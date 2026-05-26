@@ -66,7 +66,7 @@ export const findBroadcastersForToken = async (): Promise<SelectedBroadcaster[]>
     chainCache.set(tokenKey, merged);
     return merged;
   } catch (error) {
-    throwErrorWithTitle(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_BROADCASTER, error);
+    throwErrorWithTitle(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN, error);
   }
 };
 

@@ -20,7 +20,7 @@ export const getDefaultBroadcasterForToken = async () => {
     const broadcasters = await findBroadcastersForToken();
 
     if (!broadcasters || broadcasters.length === 0) {
-      throw new Error("No broadcasters found for token");
+      throw new Error(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN);
     }
     
     const defaultBroadcasterTxFailCount = useBroadcasterStore.getState().defaultBroadcasterTxFailCount;
@@ -44,7 +44,7 @@ export const getDefaultBroadcasterForToken = async () => {
     return randomlySelectedBroadcaster;
   } catch (error) {
     throwErrorWithTitle(
-      WALLET_MODE_NOTIFICATIONS.FINDING_DEFAULT_BROADCASTER_FOR_TOKEN_ERROR,
+      WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN,
       error
     );
   }

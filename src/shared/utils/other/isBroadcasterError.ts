@@ -8,8 +8,7 @@ export function isBroadcasterError(error: unknown): boolean {
   typeof (error as any).title === "string" ? (error as any).title : undefined;
 
   const broadcasterErrorTitles = (
-    WALLET_MODE_NOTIFICATIONS.FINDING_DEFAULT_BROADCASTER_FOR_TOKEN_ERROR || 
-    WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_BROADCASTER || 
+    WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN ||
     WALLET_MODE_NOTIFICATIONS.GENERAL_BROADCASTER_ERROR
   );
 

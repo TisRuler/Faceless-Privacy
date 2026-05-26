@@ -12,7 +12,7 @@ export const getSelectedBroadcaster = async (isUsingSelfSignMethod: boolean) => 
   } else {
     selectedBroadcaster = await getBroadcaster();
     if (!selectedBroadcaster) {  
-      throw Error(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_BROADCASTER);
+      throw Error(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN);
     }
   }
 
