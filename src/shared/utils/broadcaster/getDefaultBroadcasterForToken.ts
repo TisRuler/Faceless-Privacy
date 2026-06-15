@@ -4,7 +4,7 @@ import { WALLET_MODE_NOTIFICATIONS } from "~~/src/constants/notifications";
 import { useBroadcasterStore } from "~~/src/state-managers";
 import { SelectedBroadcaster } from "@railgun-community/shared-models";
 
-const DEFAULT_RAILGUN_ADDRESS = "0zk1qyr6prgl0jdhp826nt8e56tq667la4zavwa5jzxe26g8fnqafd2f0rv7j6fe3z53ll0p6eyzhx87a98ed4dkhsx5r8cc0ggmqvt6wzqtgqsywq9tq4tnz5ra2ws";
+const DEFAULT_RAILGUN_ADDRESS = "0zk1qy0dylwhlhsrwe7h6yj5thfqwa40t4tmhfu97fdwjkffqjydjgxrkunpd9kxwatwqqn969wt0ashu4vwkhly4ldmszzxaau9uppgxzxxqka5zpeq0pqr7l9vx23";
 
 // Helper
 const pickRandomBroadcaster = (broadcasters: SelectedBroadcaster[]) => {

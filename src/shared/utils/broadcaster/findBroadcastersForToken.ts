@@ -6,40 +6,19 @@ import { useBroadcasterStore } from "~~/src/state-managers";
 import { WALLET_MODE_NOTIFICATIONS } from "~~/src/constants/notifications";
 import { throwErrorWithTitle } from "../other/throwErrorWithTitle";
 import { SelectedBroadcaster } from "@railgun-community/shared-models";
-import { SendableToken, SupportedChainId } from "../../types";
 
-// Cache keyed by chainId -> tokenAddress -> SelectedBroadcaster[]
-const broadcasterCache = new Map<SupportedChainId, Map<string, SelectedBroadcaster[]>>();
-let lastPurge = Date.now();
+// Fee thresholds
+const STRICT_MIN_FEE = 0.85;
+const STRICT_MAX_FEE = 2.5;
+const LENIENT_MIN_FEE = 0.6;
+const LENIENT_MAX_FEE = 8;
+const MIN_BROADCASTERS_FOR_LENIENT_FALLBACK = 9;
 
-// Purge and refresh every 3 hours
-const CACHE_TTL = 3 * 60 * 60 * 1000;
-const purgeCacheIfExpired = () => {
-  if (Date.now() - lastPurge >= CACHE_TTL) {
-    broadcasterCache.clear();
-    lastPurge = Date.now();
-  }
-};
-
-/* 
-  The cache is useful for merging and maintaining a consistent in-memory list, but it’s not actually reducing load or latency.
-  Caches broadcasters per chainId + tokenAddress to avoid repeated network calls.
-  Merges new results into cache, removing duplicates by railgunAddress + tokenAddress + fee.
-  Filters broadcasters by fee (0.6–2.5).
-  Cache auto-clears every 3 hours. 
-*/
+// Main
 export const findBroadcastersForToken = async (): Promise<SelectedBroadcaster[]> => {
   try {
-    purgeCacheIfExpired();
-
     const { railgunChain, id: chainId } = getActiveNetwork();
     const { broadcasterFeeToken } = useBroadcasterStore.getState();
-    const tokenKey = broadcasterFeeToken.address.toLowerCase();
-
-    if (!broadcasterCache.has(chainId)) broadcasterCache.set(chainId, new Map());
-    const chainCache = broadcasterCache.get(chainId)!;
-
-    const cached = chainCache.get(tokenKey) ?? [];
 
     const freshBroadcasters = await WakuBroadcasterClient.findBroadcastersForToken(
       railgunChain,
@@ -47,42 +26,40 @@ export const findBroadcastersForToken = async (): Promise<SelectedBroadcaster[]>
       false
     );
 
-    const filteredFreshBroadcasters = await filterBroadcasters(freshBroadcasters, broadcasterFeeToken, chainId);
+    // - Deduplication
+    const uniqueMap = new Map<string, SelectedBroadcaster>();
+    for (const broadcaster of freshBroadcasters) {
+      const existing = uniqueMap.get(broadcaster.railgunAddress);
+      if (!existing || broadcaster.tokenFee.expiration > existing.tokenFee.expiration) {
+        uniqueMap.set(broadcaster.railgunAddress, broadcaster);
+      }
+    }
 
-    // Merge unique
-    const merged = [
-      ...cached,
-      ...filteredFreshBroadcasters.filter(
-        n =>
-          !cached.some(
-            c =>
-              c.railgunAddress === n.railgunAddress &&
-              c.tokenAddress === n.tokenAddress &&
-              c.tokenFee.feePerUnitGas === n.tokenFee.feePerUnitGas
-          )
-      ),
-    ];
+    const tokenContract = await getCachedEthersERC20Contract(chainId, broadcasterFeeToken.address);
+    const decimals = await getCachedTokenDecimals(chainId, tokenContract, broadcasterFeeToken.address);
 
-    chainCache.set(tokenKey, merged);
-    return merged;
+    const uniqueBroadcasters = Array.from(uniqueMap.values());
+    
+    const broadcastersWithFees = uniqueBroadcasters.map(broadcaster => ({
+      ...broadcaster,
+      broadcasterFee: Number(formatUnits(BigInt(broadcaster.tokenFee.feePerUnitGas), decimals)),
+    }));
+
+    // - Strict fee filter
+    let filteredBroadcasters = broadcastersWithFees.filter(
+      b => b.broadcasterFee >= STRICT_MIN_FEE && b.broadcasterFee <= STRICT_MAX_FEE
+    );
+    
+    // - If strict filter was too tight, fall back to lenient fee filter
+    if (filteredBroadcasters.length < MIN_BROADCASTERS_FOR_LENIENT_FALLBACK) {
+      filteredBroadcasters = broadcastersWithFees.filter(
+        b => b.broadcasterFee >= LENIENT_MIN_FEE && b.broadcasterFee <= LENIENT_MAX_FEE
+      );
+    }
+
+    return filteredBroadcasters;
+    
   } catch (error) {
     throwErrorWithTitle(WALLET_MODE_NOTIFICATIONS.ERROR_FINDING_DEFAULT_BROADCASTER_FOR_TOKEN, error);
   }
-};
-
-// Filters broadcasters by fee.
-const filterBroadcasters = async (
-  freshBroadcasters: SelectedBroadcaster[],
-  broadcasterFeeToken: SendableToken,
-  chainId: SupportedChainId
-): Promise<SelectedBroadcaster[]> => {
-  const tokenContract = await getCachedEthersERC20Contract(chainId, broadcasterFeeToken.address);
-  const decimals = await getCachedTokenDecimals(chainId, tokenContract, broadcasterFeeToken.address);
-
-  return freshBroadcasters
-    .map(b => ({
-      ...b,
-      broadcasterFee: Number(formatUnits(BigInt(b.tokenFee.feePerUnitGas), decimals)),
-    }))
-    .filter(b => b.broadcasterFee >= 0.6 && b.broadcasterFee <= 2.5);
 };
