@@ -1,0 +1,119 @@
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.d.ts b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.d.ts
+index d1a9e85..02d00d3 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.d.ts
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.d.ts
+@@ -13,6 +13,7 @@ export declare class BroadcasterConfig {
+     static MINIMUM_BROADCASTER_VERSION: string;
+     static MAXIMUM_BROADCASTER_VERSION: string;
+     static useDNSDiscovery: boolean;
++    static useStore: boolean;
+     static customDNS: CustomDNSConfig | undefined;
+     static additionalDirectPeers: string[];
+     static storePeers: string[];
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.js b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.js
+index 5923c34..2250611 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.js
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/broadcaster-config.js
+@@ -10,6 +10,7 @@ export class BroadcasterConfig {
+     static MINIMUM_BROADCASTER_VERSION = '8.0.0';
+     static MAXIMUM_BROADCASTER_VERSION = '8.999.0';
+     static useDNSDiscovery = true;
++    static useStore = true;
+     static customDNS = undefined;
+     static additionalDirectPeers = [];
+     static storePeers = [];
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/export-models.d.ts b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/export-models.d.ts
+index 28a3e12..1843fd8 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/export-models.d.ts
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/models/export-models.d.ts
+@@ -16,6 +16,7 @@ export type BroadcasterOptions = {
+     historicalLookBackTime?: number;
+     useDNSDiscovery?: boolean;
+     useCustomDNS?: CustomDNSConfig;
++    useStore?: boolean;
+     broadcasterVersionRange?: {
+         minVersion: string;
+         maxVersion: string;
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/transact/broadcaster-transaction.js b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/transact/broadcaster-transaction.js
+index 10883d8..637982a 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/transact/broadcaster-transaction.js
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/transact/broadcaster-transaction.js
+@@ -126,7 +126,9 @@ export class BroadcasterTransaction {
+         }
+         const pollIterations = SECONDS_PER_RETRY / POLL_DELAY_SECONDS;
+         const responseTopic = contentTopics.transactResponse(this.chain);
+-        await WakuBroadcasterWakuCore.retrieveHistoricalForTopic(responseTopic);
++        if (BroadcasterConfig.useStore) {
++            await WakuBroadcasterWakuCore.retrieveHistoricalForTopic(responseTopic);
++        }
+         const response = await poll(async () => this.getTransactionResponse(), (result) => result != null, POLL_DELAY_SECONDS * 1000, pollIterations);
+         if (isDefined(response)) {
+             if (isDefined(response.txHash)) {
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-peer-discovery-core-base.js b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-peer-discovery-core-base.js
+index 7a30c50..c797ca4 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-peer-discovery-core-base.js
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-peer-discovery-core-base.js
+@@ -196,9 +196,13 @@ export class WakuBroadcasterPeerDiscoveryCoreBase extends WakuBroadcasterWakuCor
+                 bootstrapPeers: directPeers,
+                 libp2p: libp2pOptions,
+                 networkConfig: BroadcasterConfig.getWakuNetworkConfig(),
+-                store: {
+-                    peers: storePeers,
+-                },
++                ...(BroadcasterConfig.useStore
++                    ? {
++                        store: {
++                            peers: storePeers,
++                        },
++                    }
++                    : {}),
+                 ...this.getConnectionManagerOptions(),
+             });
+             const waku = this.waku;
+@@ -211,7 +215,11 @@ export class WakuBroadcasterPeerDiscoveryCoreBase extends WakuBroadcasterWakuCor
+             await waku.start();
+             await this.afterNodeStart();
+             BroadcasterDebug.log('Waiting for remote peer.');
+-            await waku.waitForPeers([Protocols.Filter, Protocols.LightPush, Protocols.Store], this.peerDiscoveryTimeout);
++            const protocols = [Protocols.Filter, Protocols.LightPush];
++            if (BroadcasterConfig.useStore) {
++                protocols.push(Protocols.Store);
++            }
++            await waku.waitForPeers(protocols, this.peerDiscoveryTimeout);
+             BroadcasterDebug.log(this.getConnectedLogMessage());
+             this.hasError = false;
+         }
+diff --git a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-waku-core-base.js b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-waku-core-base.js
+index 2064285..1536a2f 100644
+--- a/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-waku-core-base.js
++++ b/node_modules/@railgun-community/waku-broadcaster-client-web/dist/waku/waku-broadcaster-waku-core-base.js
+@@ -25,7 +25,9 @@ export class WakuBroadcasterWakuCoreBase {
+             }
+             WakuObservers.resetCurrentChain();
+             await WakuObservers.setObserversForChain(this.waku, chain);
+-            this.pollHistoricalTopics();
++            if (BroadcasterConfig.useStore) {
++                this.pollHistoricalTopics();
++            }
+         }
+         catch (err) {
+             if (!(err instanceof Error)) {
+@@ -66,7 +68,7 @@ export class WakuBroadcasterWakuCoreBase {
+             pubSubTopic: broadcasterOptions.pubSubTopic,
+         });
+         this.pubSubTopic = BroadcasterConfig.pubSubTopic;
+-        if (broadcasterOptions.additionalDirectPeers) {
++        if (isDefined(broadcasterOptions.additionalDirectPeers)) {
+             this.additionalDirectPeers =
+                 broadcasterOptions.additionalDirectPeers;
+         }
+@@ -81,6 +83,9 @@ export class WakuBroadcasterWakuCoreBase {
+         if (isDefined(broadcasterOptions.historicalLookBackTime)) {
+             BroadcasterConfig.historicalLookBackTime = broadcasterOptions.historicalLookBackTime;
+         }
++        if (isDefined(broadcasterOptions.useStore)) {
++            BroadcasterConfig.useStore = broadcasterOptions.useStore;
++        }
+     }
+     static async disconnect() {
+         await WakuObservers.unsubscribe(this.waku);

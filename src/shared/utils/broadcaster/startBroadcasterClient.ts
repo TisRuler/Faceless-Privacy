@@ -16,7 +16,8 @@ export const startBroadcasterClient = async () => {
   const trustedFeeSigner = "0zk1qyzgh9ctuxm6d06gmax39xutjgrawdsljtv80lqnjtqp3exxayuf0rv7j6fe3z53laetcl9u3cma0q9k4npgy8c8ga4h6mx83v09m8ewctsekw4a079dcl5sw4k";
 
   const broadcasterOptions: BroadcasterOptions = {
-    trustedFeeSigner
+    trustedFeeSigner,
+    useStore: false,
   };
 
   const statusCallback: BroadcasterConnectionStatusCallback = (
