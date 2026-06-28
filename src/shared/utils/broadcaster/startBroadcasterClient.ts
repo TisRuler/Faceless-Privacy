@@ -17,6 +17,7 @@ export const startBroadcasterClient = async () => {
 
   const broadcasterOptions: BroadcasterOptions = {
     trustedFeeSigner,
+    peerDiscoveryTimeout: 180000, // 3 mins
     useStore: false,
   };
 
