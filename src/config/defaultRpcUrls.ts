@@ -5,7 +5,7 @@ export const DEFAULT_RPC_URLS: Record<SupportedChainId, string[]> = {
     "https://eth-pokt.nodies.app",
     "https://eth.llamarpc.com",
     "https://ethereum-rpc.publicnode.com",
-    "https://endpoints.omniatech.io/v1/eth/mainnet/public",
+    "https://rpc.mevblocker.io",
   ],
   56: [
     "https://bsc-rpc.publicnode.com",
@@ -16,7 +16,7 @@ export const DEFAULT_RPC_URLS: Record<SupportedChainId, string[]> = {
   137: [
     "https://polygon-bor-rpc.publicnode.com",
     "https://polygon.drpc.org",
-    "https://endpoints.omniatech.io/v1/matic/mainnet/public"
+    "https://rpc-polygon.blockmachine.io",
   ],
   //   80002: [
   //     "https://polygon-amoy.drpc.org",
@@ -30,8 +30,7 @@ export const DEFAULT_RPC_URLS: Record<SupportedChainId, string[]> = {
     "https://arb-one.api.pocket.network",
   ],
   11155111: [
-    "https://ethereum-sepolia-rpc.publicnode.com",
-    "https://endpoints.omniatech.io/v1/eth/sepolia/public",
+    "https://0xrpc.io/sep",
     "https://ethereum-sepolia-rpc.publicnode.com",
     "https://eth-sepolia-testnet.api.pocket.network"
   ],
